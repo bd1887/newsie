@@ -36,4 +36,8 @@ def dbscan(articles):
         else:
             sorted_articles.append([articles[idx]])
 
+    sorted_articles.sort(key=len, reverse=True)
+
+    print(sorted_articles[0])
+
     return sorted_articles
