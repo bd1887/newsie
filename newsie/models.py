@@ -6,7 +6,7 @@ from django.contrib import admin
 # Create your models here.
 
 class Article(models.Model):
-    url = models.URLField(unique=True)
+    url = models.URLField(max_length=500, unique=True)
     title = models.CharField(max_length=500)
     authors = ArrayField(
         models.CharField(max_length=500),

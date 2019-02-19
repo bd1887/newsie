@@ -69,6 +69,7 @@ def update_articles(request):
         db_art.description = art.description
         db_art.img = art.img
         db_art.pub_date = art.pub_date
+        db_art.category = art.category
         db_art.save()
     
     return HttpResponse(html)
