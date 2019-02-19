@@ -4,8 +4,6 @@ from . import views
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-# router.register('articles', views.ArticleView)
-# router.register('get-first', views.GetFirst)
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -15,5 +13,4 @@ urlpatterns = [
     path('category/', views.update_categories),
     path('train/', views.train_classifier),
     path('classify/', views.classify_article),
-    path('news-please/', views.news_please)
 ]

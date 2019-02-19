@@ -47,6 +47,7 @@ def classify(article):
     probability = max(probability[0])
     article.category = category[0]
     html_string = "<h2>" + article.title + "</h2>"
+    html_string += "<a href=" + article.url + ">" + article.url + "</a>"
     html_string += "<h3>" + category[0] + " | " + str(probability) + "</br>"
 
     return html_string

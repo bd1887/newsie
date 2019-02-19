@@ -74,19 +74,6 @@ def update_articles(request):
     
     return HttpResponse(html)
 
-def news_please(request):
-    html = ""
-    article = news_plz()
-    html += article.title + "</br></br>"
-    html += str(article.date_publish) + "</br></br>"
-    html += article.description + "</br></br>"
-    html += str(article.authors) + "</br></br>"
-    html += article.description + "</br></br>"
-    html += article.image_url + "</br></br>"
-    html += article.text + "</br></br>"
-    
-    return HttpResponse(html)
-
 class ArticleView(generics.ListAPIView):
     
     serializer_class = serializers.ResultsField
