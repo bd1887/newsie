@@ -1,6 +1,6 @@
+from utils.dummy_fun import dummy_fun
 import nltk
-from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.cluster import DBSCAN
 
 def dbscan(articles):
@@ -8,36 +8,40 @@ def dbscan(articles):
     if len(articles) == 0:
         return []
 
-    texts = [art.get_text() for art in articles]
-    texts = [art.lower() for art in texts]
+    # get text from Article object, to lowercase
+    texts = [art.tokens for art in articles]
 
-    stopset = set(stopwords.words('english'))
-    # stopset.update(['just', 'some', 'examples'])
-
-    tfidf = TfidfVectorizer(stop_words=stopset, use_idf=True, ngram_range=(1, 3))
+    tfidf = TfidfVectorizer(
+    use_idf=True,
+    analyzer='word',
+    tokenizer=dummy_fun, #No need to preprocess,
+    preprocessor=dummy_fun, # since it was done while webscraping
+    token_pattern=None)  
+    
     tfidf_matrix = tfidf.fit_transform(texts)
 
-
-    dbscan = DBSCAN(eps=0.8, min_samples=2, metric='cosine', algorithm='auto')
+    dbscan = DBSCAN(eps=0.75, min_samples=2, metric='cosine', algorithm='auto')
 
     labels = dbscan.fit_predict(tfidf_matrix)
     num_topics = max(labels) + 1
-    print("Number of topics: ", num_topics)
+
+    print("*****************************")
+    print(f"Num topics: {num_topics}")
+    print(f"Total artices: {len(articles)}")
 
     sorted_articles = []
 
+    # create list for each topic
     for i in range(num_topics):
         sorted_articles.append([])
 
     for idx, art in enumerate(articles):
-        if labels[idx] > -1:
-            topic_num = labels[idx]
-            sorted_articles[topic_num].append(art)
-        else:
-            sorted_articles.append([articles[idx]])
+        if labels[idx] > -1: #Article has a cluster
+            topic_num = labels[idx] #Get cluster number
+            sorted_articles[topic_num].append(art) #Append Article to its cluster list
+        else: #Article has no cluster
+            sorted_articles.append([articles[idx]]) #Put Article in a list by itself
 
-    sorted_articles.sort(key=len, reverse=True)
-
-    print(sorted_articles[0])
+    sorted_articles.sort(key=len, reverse=True) #Sort with largest clusters first
 
     return sorted_articles
