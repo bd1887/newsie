@@ -134,11 +134,7 @@ STATIC_URL = '/static/'
 import django_heroku
 django_heroku.settings(locals())
 
+# Configure Heroku's POSTGRES db
 import dj_database_url
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')
-    )
-}
+db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+DATABASES['default'].update(db_from_env)
