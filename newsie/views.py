@@ -14,7 +14,7 @@ class TopStoriesView(generics.ListAPIView):
     def list(self, request):
 
         #Extract dates from GET query
-        range_start = get_date_or_default(request.GET.get('range_start'), default="today_min")
+        range_start = get_date_or_default(request.GET.get('range_start'), default="yesterday_min")
         range_end = get_date_or_default(request.GET.get('range_start'), default="today_max")
 
         queryset = self.get_queryset(range_start=range_start, range_end=range_end)

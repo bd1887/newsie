@@ -26,7 +26,7 @@ def train(articles):
     training_data = count_vector.fit_transform(X_train)
     testing_data = count_vector.transform(X_test)
 
-    model = LogisticRegression()
+    model = LogisticRegression(solver='liblinear')
 
     pipe = make_pipeline(count_vector, model)
 

@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = 'Gets todays top stories'
 
     def handle(self, *args, **kwargs):
-        self.stdout.write("Merging stories...")
+        self.stdout.write("Merging article topics...")
         self.merge_stories()
         self.stdout.write("Done!")
 
