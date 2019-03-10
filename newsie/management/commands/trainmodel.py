@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from newsie.models import Article
-from newsie.nlp.topic_classifier import train
+from newsie.nlp.category_classifier import train
 
 class Command(BaseCommand):
     help = 'Runs webscraper'
