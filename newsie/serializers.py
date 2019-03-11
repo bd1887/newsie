@@ -22,3 +22,13 @@ class TopicsSerializer(serializers.Serializer):
     education = ResultsField()
     ireland = ResultsField()
     world = ResultsField()
+
+class InstructionsSerializer(serializers.ListField):
+    child = EndpointSerializer()
+
+class EndpointSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=500)
+    url = serializers.URLField()
+    parameters = serializers.ListField(
+        child = serializers.CharField(max_length=500)
+    )

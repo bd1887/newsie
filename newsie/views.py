@@ -7,6 +7,37 @@ from newsie.publications.get_articles import categories
 from utils.get_date_or_default import get_date_or_default
 from django.db.models import Count
 
+class InstructionsView(generics.GenericAPIView):
+    serializer_class = serializers.InstructionsSerializer
+
+    def list(self, request):
+
+        top_stories_instructions = {
+            'name': '/top-stories',
+            'url': 'https://bd1887-newsie.herokuapp.com/top-stories',
+            'parameters': [
+                'range_start=YYYY_mm_dd',
+                'range_end=YYY_mm_dd',
+            ],
+        }
+        exclusive_stories_instructions = {
+            'name': '/exclusive-stories',
+            'url': 'https://bd1887-newsie.herokuapp.com/exclusive-stories',
+            'parameters': [
+                'range_start=YYYY_mm_dd',
+                'range_end=YYY_mm_dd',
+            ],
+        }
+
+        instructions = [
+            top_stories_instructions,
+            exclusive_stories_instructions,
+        ]
+
+        serializer = serializers.InstructionsSerializer(instructions)
+        return Response(serializer.data)
+
+
 
 class TopStoriesView(generics.ListAPIView):
     serializer_class = serializers.TopicsSerializer
