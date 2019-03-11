@@ -6,7 +6,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 
 urlpatterns = [
-    path('', views.TopStoriesView.as_view()),
+    path('', views.InstructionsView.as_view()),
     url(r'^top-stories', views.TopStoriesView.as_view()),
     url(r'^exclusive-stories', views.ExclusiveStoriesView.as_view()),
 ]

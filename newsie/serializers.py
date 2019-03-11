@@ -23,12 +23,14 @@ class TopicsSerializer(serializers.Serializer):
     ireland = ResultsField()
     world = ResultsField()
 
-class InstructionsSerializer(serializers.ListField):
-    child = EndpointSerializer()
-
 class EndpointSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=500)
     url = serializers.URLField()
     parameters = serializers.ListField(
         child = serializers.CharField(max_length=500)
+    )
+
+class InstructionsSerializer(serializers.Serializer):
+    instructions = serializers.ListField(
+        child = EndpointSerializer()
     )

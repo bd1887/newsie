@@ -10,7 +10,7 @@ from django.db.models import Count
 class InstructionsView(generics.GenericAPIView):
     serializer_class = serializers.InstructionsSerializer
 
-    def list(self, request):
+    def get(self, request):
 
         top_stories_instructions = {
             'name': '/top-stories',
@@ -29,10 +29,12 @@ class InstructionsView(generics.GenericAPIView):
             ],
         }
 
-        instructions = [
-            top_stories_instructions,
-            exclusive_stories_instructions,
-        ]
+        instructions = {
+            'instructions': [
+                top_stories_instructions,
+                exclusive_stories_instructions,
+            ]
+        }
 
         serializer = serializers.InstructionsSerializer(instructions)
         return Response(serializer.data)
