@@ -24,4 +24,5 @@ class Command(BaseCommand):
                 db_art.pub_date = art.pub_date
                 db_art.category = art.category
                 db_art.tokens = art.tokens
+                db_art.labeled = art.labeled
                 db_art.save()

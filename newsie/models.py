@@ -3,6 +3,8 @@ from datetime import datetime
 from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
 from django.contrib import admin
+from urllib.parse import urlparse
+import re
 
 class Article(models.Model):
     url = models.URLField(max_length=500, unique=True)
@@ -40,8 +42,8 @@ class Article(models.Model):
 
     def to_dict(self):
         return {
-            'url': self.url,
-            'text': self.tokens,
+            'url_tokens': re.split('/|-', urlparse(self.url).path.split('.')[0])[1:],
+            'tokens':  self.tokens,
             'category': self.category,
         }
 

@@ -2,54 +2,82 @@ from newsie.models import Article
 from utils.dummy_fun import dummy_fun
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
 from joblib import dump, load
-from sklearn.pipeline import make_pipeline
+from sklearn.pipeline import Pipeline, TransformerMixin, FeatureUnion
+from sklearn.multiclass import OneVsRestClassifier
 
+def classify(article):
+    pipe = load('model.joblib')
+    df = pd.DataFrame.from_records([article.to_dict()])
+    category = pipe.predict(df)
+    probability = pipe.predict_proba(df)
+    probability = max(probability[0])
+    article.category = category[0]
+    print(f"Prediction: {category[0]} {probability} | {article.url}")
+    
+    classification = category[0] if probability > .93 else ''
+
+    return classification
+
+
+class DataFrameColumnExtracter(TransformerMixin):
+
+    def __init__(self, column):
+        self.column = column
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X, y=None):
+        return X[self.column]
 
 def train(articles):
-    news_df = pd.DataFrame.from_records([art.to_dict() for art in articles])
-    X_train, X_test, y_train, y_test = train_test_split(
-        news_df['text'], 
-        news_df['category'], 
-        random_state = 1
-    )
 
-    count_vector = CountVectorizer(
+    cvec = CountVectorizer(
         analyzer='word',
         tokenizer=dummy_fun,
         preprocessor=dummy_fun,
         token_pattern=None
         )
-    training_data = count_vector.fit_transform(X_train)
-    testing_data = count_vector.transform(X_test)
 
-    model = LogisticRegression(solver='liblinear')
+    tfidf = TfidfVectorizer(
+        analyzer='word',
+        tokenizer=dummy_fun,
+        preprocessor=dummy_fun,
+        token_pattern=None
+        )
 
-    pipe = make_pipeline(count_vector, model)
 
-    model.fit(training_data, y_train)
-    predictions = model.predict(testing_data)
-    print("Accuracy score: ", accuracy_score(y_test, predictions))
-    print("Recall score: ", recall_score(y_test, predictions, average = 'weighted'))
-    print("Precision score: ", precision_score(y_test, predictions, average = 'weighted'))
-    print("F1 score: ", f1_score(y_test, predictions, average = 'weighted'))
+    news_df = pd.DataFrame.from_records([art.to_dict() for art in articles])
+    
+    X = news_df.drop('category', 1)
+    Y = news_df['category']
 
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, 
+        Y, 
+        random_state = 42,
+        test_size=0.33
+    )
+
+    pipe = Pipeline([
+        ('features', FeatureUnion([
+                ('url_tokens', Pipeline([
+                    ('selector', DataFrameColumnExtracter('url_tokens')),
+                    ('vec', cvec)
+                ])),
+                ('text_features', Pipeline([
+                    ('selector', DataFrameColumnExtracter('tokens')),
+                    ('vec', tfidf)
+                ]))
+            ])),
+        ('clf', OneVsRestClassifier(LogisticRegression(solver='liblinear')))
+    ])
+
+    pipe.fit(X_train, y_train)
+    print(pipe.score(X_test, y_test))
     dump(pipe, 'model.joblib')
 
     return news_df
-
-def classify(article):
-    pipe = load('model.joblib')
-    tokens = article.tokens
-    category = pipe.predict([tokens])
-    probability = pipe.predict_proba([tokens])
-    probability = max(probability[0])
-    article.category = category[0]
-    print(f"Prediction: {category[0]} {probability} | {article.url}")
-    
-    classification = category[0] if probability > .98 else ''
-
-    return classification

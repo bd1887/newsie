@@ -11,5 +11,5 @@ class Command(BaseCommand):
         self.stdout.write("Done!")
 
     def train_classifier(self):
-        articles = Article.objects.all().exclude(labeled__exact=False, category__exact='')
+        articles = Article.objects.all().exclude(labeled__exact=False).exclude(category__exact='')
         train(articles)
