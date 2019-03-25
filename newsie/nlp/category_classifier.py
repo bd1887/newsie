@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn import svm
 from joblib import dump, load
 from sklearn.pipeline import Pipeline, TransformerMixin, FeatureUnion
 from sklearn.multiclass import OneVsRestClassifier
@@ -11,13 +12,17 @@ from sklearn.multiclass import OneVsRestClassifier
 def classify(article):
     pipe = load('model.joblib')
     df = pd.DataFrame.from_records([article.to_dict()])
-    category = pipe.predict(df)
+    category = pipe.predict(df)[0]
     probability = pipe.predict_proba(df)
     probability = max(probability[0])
     article.category = category[0]
-    print(f"Prediction: {category[0]} {probability} | {article.url}")
+    # print(f"Prediction: {category[0]} {probability} | {article.url}")
     
-    classification = category[0] if probability > .93 else ''
+    print(f'{category} | {probability}')
+    print(article.title)
+    print('--------')
+    print(' ')
+    classification = category if probability > .93 else ''
 
     return classification
 
@@ -34,7 +39,7 @@ class DataFrameColumnExtracter(TransformerMixin):
         return X[self.column]
 
 def train(articles):
-
+    clf = svm.SVC(kernel='linear', probability=True)
     cvec = CountVectorizer(
         analyzer='word',
         tokenizer=dummy_fun,
@@ -73,7 +78,7 @@ def train(articles):
                     ('vec', tfidf)
                 ]))
             ])),
-        ('clf', OneVsRestClassifier(LogisticRegression(solver='liblinear')))
+        ('clf', OneVsRestClassifier(clf))
     ])
 
     pipe.fit(X_train, y_train)
