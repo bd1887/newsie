@@ -49,6 +49,7 @@ def update():
         all_articles = []
         for key in urls:
                 for url in urls[key]:
+                        #Returns a list of Article objects:
                         all_articles += rss_scraper(url, category=key)
         return all_articles
 

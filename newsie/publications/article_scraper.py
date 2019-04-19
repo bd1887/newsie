@@ -22,10 +22,12 @@ def rss_scraper(rss_url, category):
     for item in items:
         article_url = strip_tags(item.find_all("link")) #<link> tag holds the article url
 
+        #Creates a NewsPlease object which automatically extracts information from article
         art = NewsPlease.from_url(article_url)
 
         ###NewsPlease attempts to extract the following information from the article: ###
         pub_date = datetime.datetime.combine(art.date_publish, datetime.time.min, timezone.utc)
+        title = art.title
         description = art.description if art.description != None else ''
         body = art.text if art.text != None else ''
         img = art.image_url if art.image_url != None else ''

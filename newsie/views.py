@@ -1,11 +1,47 @@
-from rest_framework import viewsets, generics
+from rest_framework import generics
 from rest_framework.response import Response
 from . import serializers
-from newsie.models import Article
-from newsie.nlp.dbscan import dbscan
-from newsie.publications.get_articles import categories
-from utils.get_date_or_default import get_date_or_default
-from django.db.models import Count
+from newsie.models import Article, ArticleCluster
+from datetime import datetime, timedelta
+from django.utils import timezone
+from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.exceptions import APIException
+
+class ExclusiveStoriesView(generics.ListAPIView):
+    last_36_hours = timezone.make_aware(datetime.today() - timedelta(hours=36))
+    queryset = ArticleCluster.objects.exclude(top_story_on__gte=last_36_hours).order_by('-most_recent_pub_date')
+    serializer_class = serializers.ArticleClusterSerializer
+    pagination_class = LimitOffsetPagination
+
+
+class TopStoriesView(generics.ListAPIView):
+
+    def list(self, request):
+
+        valid_date_range_queries = {
+            '': 'size_today',
+            'today': 'size_today',
+            'this_week': 'size_this_week',
+            'this_month': 'size_this_month',
+            'all': 'size',
+        }
+        date_range_query = request.GET.get('date_range', '')
+        date_range_string = ''
+
+        try:
+            date_range_string = valid_date_range_queries[date_range_query]
+        except:
+            raise InvalidQueryError()
+
+        queryset = self.get_queryset(date_range=date_range_string)
+        serializer = serializers.ArticleClusterSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def get_queryset(self, date_range=''):
+        order_by_string = f"-{date_range}" if date_range != '' else "-size_today"
+        queryset = ArticleCluster.objects.filter(size__gte=2).order_by(order_by_string)[:5]
+
+        return queryset
 
 class InstructionsView(generics.GenericAPIView):
     serializer_class = serializers.InstructionsSerializer
@@ -16,17 +52,17 @@ class InstructionsView(generics.GenericAPIView):
             'name': '/top-stories',
             'url': 'https://bd1887-newsie.herokuapp.com/top-stories',
             'parameters': [
-                'range_start=YYYY_mm_dd',
-                'range_end=YYY_mm_dd',
+                'date_range=[today, this_week, this_month, all]'
             ],
         }
         exclusive_stories_instructions = {
             'name': '/exclusive-stories',
             'url': 'https://bd1887-newsie.herokuapp.com/exclusive-stories',
             'parameters': [
-                'range_start=YYYY_mm_dd',
-                'range_end=YYY_mm_dd',
-            ],
+                'limit=#',
+                'offset=#'
+            ]
+            
         }
 
         instructions = {
@@ -38,81 +74,3 @@ class InstructionsView(generics.GenericAPIView):
 
         serializer = serializers.InstructionsSerializer(instructions)
         return Response(serializer.data)
-
-
-
-class TopStoriesView(generics.ListAPIView):
-    serializer_class = serializers.TopicsSerializer
-
-    def list(self, request):
-
-        #Extract dates from GET query
-        range_start = get_date_or_default(request.GET.get('range_start'), default="yesterday_min")
-        range_end = get_date_or_default(request.GET.get('range_end'), default="today_max")
-
-        queryset = self.get_queryset(range_start=range_start, range_end=range_end)
-        serializer = serializers.TopicsSerializer(queryset)
-        return Response(serializer.data)
-
-    def get_queryset(self, range_start, range_end):
-        query_dict ={}
-        
-        for category in categories(): #Iterate through RSS feed Categories
-
-            # Find topics with the most articles in them if the number of topics is greater than 1:
-            query = Article.objects \
-            .filter(pub_date__range=(range_start, range_end), category__exact=category) \
-            .values_list('topic_id').annotate(article_count=Count('topic_id')) \
-            .filter(article_count__gt=1).order_by('-article_count')
-
-            query = query[:3] #Get three most common topics in each category
-
-            query_set = []
-            for topic in query:
-                # Get the articles with the common topic ids calculated above
-                bucket = Article.objects.filter(pub_date__range=(range_start, range_end), category__exact=category, topic_id__exact=topic[0]).order_by('pub_date')
-                query_set.append(bucket)
-
-            category = category.lower().replace(' ', '_') #Make category name JSON-friendly
-            
-            query_dict[category]=query_set
-
-        return query_dict
-
-class ExclusiveStoriesView(generics.ListAPIView):
-
-    def list(self, request):
-
-        #Extract dates from GET query
-        range_start = get_date_or_default(request.GET.get('range_start'), default="today_min")
-        range_end = get_date_or_default(request.GET.get('range_end'), default="today_max")
-
-        queryset = self.get_queryset(range_start, range_end)
-        serializer = serializers.TopicsSerializer(queryset)
-        return Response(serializer.data)
-
-    def get_queryset(self, range_start, range_end):
-
-        query_dict ={}
-
-        for category in categories(): #Iterate through RSS feed Categories
-
-            # Find topics with the most articles in them:
-            topics = Article.objects \
-            .filter(pub_date__range=(range_start, range_end), category__exact=category) \
-            .values_list('topic_id').annotate(article_count=Count('topic_id')) \
-            .order_by('-article_count')
-            
-            topics = topics[3:] #Remove the three most common topics (These will appear in the top stories)
-
-            query_set = []
-            for topic in topics:
-                # Get the articles with the common topic ids calculated above
-                bucket = Article.objects.filter(pub_date__range=(range_start, range_end), category__exact=category, topic_id__exact=topic[0])
-                query_set.append(bucket)
-
-            category = category.lower().replace(' ', '_') #Make category name JSON-friendly
-            
-            query_dict[category]=query_set
-
-        return query_dict

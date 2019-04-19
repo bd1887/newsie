@@ -5,29 +5,25 @@ from sklearn.cluster import DBSCAN
 
 def dbscan(articles):
 
-    if len(articles) == 0:
-        return []
-
-    # get text from Article object, to lowercase
+    #Creates a list of the pre-processed Article tokens
     texts = [art.tokens for art in articles]
 
     tfidf = TfidfVectorizer(
     use_idf=True,
-    analyzer='word',
-    tokenizer=dummy_fun, #No need to preprocess,
-    preprocessor=dummy_fun, # since it was done while webscraping
-    token_pattern=None)  
+    tokenizer=dummy_fun, #No need to pre-process,
+    preprocessor=dummy_fun) # since it was done while webscraping
     
     tfidf_matrix = tfidf.fit_transform(texts)
 
-    dbscan = DBSCAN(eps=0.75, min_samples=2, metric='cosine', algorithm='auto')
+    #eps was chosen somewhat arbitrarily; more testing required
+    dbscan = DBSCAN(eps=0.75, min_samples=2, metric='cosine')
 
-    labels = dbscan.fit_predict(tfidf_matrix)
-    num_topics = max(labels) + 1
+    #Generates a list of cluster numbers (or -1 for noise)
+    #whose indexes correspond to the indexes of the Articles list
+    clusters = dbscan.fit_predict(tfidf_matrix)
 
-    print("*****************************")
-    print(f"Num topics: {num_topics}")
-    print(f"Total artices: {len(articles)}")
+    #The highest generated topic number, for iterating
+    num_topics = max(clusters) + 1
 
     sorted_articles = []
 
@@ -35,9 +31,10 @@ def dbscan(articles):
     for i in range(num_topics):
         sorted_articles.append([])
 
+    #Puts articles in lists according to their topic number
     for idx, art in enumerate(articles):
-        if labels[idx] > -1: #Article has a cluster
-            topic_num = labels[idx] #Get cluster number
+        if clusters[idx] > -1: #Article has a cluster
+            topic_num = clusters[idx] #Get cluster number
             sorted_articles[topic_num].append(art) #Append Article to its cluster list
         else: #Article has no cluster
             sorted_articles.append([articles[idx]]) #Put Article in a list by itself

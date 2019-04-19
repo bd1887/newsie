@@ -10,18 +10,20 @@ from sklearn.pipeline import Pipeline, TransformerMixin, FeatureUnion
 from sklearn.multiclass import OneVsRestClassifier
 
 def classify(article):
+    #load the trained classifier
     pipe = load('model.joblib')
-    df = pd.DataFrame.from_records([article.to_dict()])
+
+    #convert the article to a dictionary then DataFrame
+    df = pd.DataFrame.from_records([article.to_dict()]) 
+
+    #0th index will be the category with the highest probability
     category = pipe.predict(df)[0]
+
+    #Find the probability of the most likely category
     probability = pipe.predict_proba(df)
     probability = max(probability[0])
-    article.category = category[0]
-    # print(f"Prediction: {category[0]} {probability} | {article.url}")
-    
-    print(f'{category} | {probability}')
-    print(article.title)
-    print('--------')
-    print(' ')
+
+    #If probability is greater than the threshold, return a category
     classification = category if probability > .93 else ''
 
     return classification
@@ -39,50 +41,54 @@ class DataFrameColumnExtracter(TransformerMixin):
         return X[self.column]
 
 def train(articles):
-    clf = svm.SVC(kernel='linear', probability=True)
+    #Support Vector Machine:
+    clf = svm.SVC(
+        kernel='linear', #our data is linearly separable
+        probability=True #we need probability to be calculated
+        )
     cvec = CountVectorizer(
-        analyzer='word',
-        tokenizer=dummy_fun,
-        preprocessor=dummy_fun,
-        token_pattern=None
+        tokenizer=dummy_fun, #function that does nothing
+        preprocessor=dummy_fun #since we already preprocessed
         )
+    tfidf = TfidfVectorizer(tokenizer=dummy_fun, preprocessor=dummy_fun)
 
-    tfidf = TfidfVectorizer(
-        analyzer='word',
-        tokenizer=dummy_fun,
-        preprocessor=dummy_fun,
-        token_pattern=None
-        )
-
-
+    #Converts Article objects to dictionaries for use in DataFrames
     news_df = pd.DataFrame.from_records([art.to_dict() for art in articles])
     
+    #Creates two columns (features):
+    #1 'tokens', the tokens from the article's body
+    #2 'url_tokens', the tokens from the article's url
     X = news_df.drop('category', 1)
+
+    #Creates one column with the categories (labels)
     Y = news_df['category']
 
     X_train, X_test, y_train, y_test = train_test_split(
         X, 
         Y, 
-        random_state = 42,
-        test_size=0.33
+        random_state = 42, #pseudo-random number generator for consistent results
+        test_size=0.33 #splits 33% of data into test group
     )
 
+    #Pipeline lets us save the 
     pipe = Pipeline([
         ('features', FeatureUnion([
                 ('url_tokens', Pipeline([
+                    #DataFrameColumnExtracter is a custom class
+                    #used for selecting the column with the correct feature
                     ('selector', DataFrameColumnExtracter('url_tokens')),
-                    ('vec', cvec)
+                    ('vec', cvec) # Count vectorizer
                 ])),
-                ('text_features', Pipeline([
+                ('article_tokens', Pipeline([
                     ('selector', DataFrameColumnExtracter('tokens')),
-                    ('vec', tfidf)
+                    ('vec', tfidf) # Tf-idf vectorizer
                 ]))
             ])),
         ('clf', OneVsRestClassifier(clf))
     ])
 
-    pipe.fit(X_train, y_train)
-    print(pipe.score(X_test, y_test))
-    dump(pipe, 'model.joblib')
+    pipe.fit(X_train, y_train) #Trains the classifier
+    dump(pipe, 'model.joblib') #Saves the classifier as a .joblib file
 
+    print(pipe.score(X_test, y_test))
     return news_df

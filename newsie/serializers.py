@@ -1,11 +1,28 @@
 from rest_framework import serializers
-from .models import Article
+from .models import Article, ArticleCluster
+from rest_framework.utils.urls import replace_query_param
 
 class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ('id', 'url', 'title', 'description', 'category', 'img', 'pub_date', 'topic_id', 'labeled')
+        fields = ('id', 'url', 'title', 'description', 'category', 'img', 'pub_date', 'labeled')
+
+class ArticleClusterSerializer(serializers.ModelSerializer):
+    # Calls self.get_articles() (the default name) to add related articles as a field:
+    articles = serializers.SerializerMethodField()
+    class Meta:
+        model = ArticleCluster
+        fields = ('id', 'size_today', 'most_recent_pub_date', 'articles')
+
+    def get_articles(self, instance):
+        # Get related articles; order_by most recent first
+        articles = Article.objects\
+            .filter(cluster__id=instance.id)\
+            .order_by('-pub_date')
+
+        article_serializer = ArticleSerializer(articles, many=True)
+        return article_serializer.data
 
 
 class ResultsField(serializers.ListSerializer):
@@ -13,15 +30,14 @@ class ResultsField(serializers.ListSerializer):
         child = ArticleSerializer()
     )
 
-
 class TopicsSerializer(serializers.Serializer):
-    sports = ResultsField()
-    business_and_finance = ResultsField()
-    entertainment = ResultsField()
-    health = ResultsField()
-    education = ResultsField()
-    ireland = ResultsField()
-    world = ResultsField()
+    sports = ArticleClusterSerializer(many=True, read_only=True)
+    business_and_finance = ArticleClusterSerializer(many=True, read_only=True)
+    entertainment = ArticleClusterSerializer(many=True, read_only=True)
+    health = ArticleClusterSerializer(many=True, read_only=True)
+    education = ArticleClusterSerializer(many=True, read_only=True)
+    ireland = ArticleClusterSerializer(many=True, read_only=True)
+    world = ArticleClusterSerializer(many=True, read_only=True)
 
 class EndpointSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=500)
