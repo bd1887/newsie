@@ -1,0 +1,19 @@
+{% load render_bundle from webpack_loader %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
+        <meta charset="UTF-8">
+        <title>Newsie :-)</title>
+        <style type="text/css">
+            body {
+                margin: 0;
+                }
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+        {% render_bundle 'main' %}
+    </body>
+</html>

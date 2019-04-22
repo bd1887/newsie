@@ -1,0 +1,11 @@
+.infinite-scroll-box {
+    width: 66%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media screen and (max-width: 920px) {
+    .infinite-scroll-box {
+      width: 100%;
+    }
+  }

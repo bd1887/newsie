@@ -13,7 +13,7 @@ def find_top_stories():
             # Find top 5 clusters if size is 2 or greater
             top_stories = ArticleCluster.objects \
             .filter(most_recent_pub_date__gte=last_36_hours, category__exact=category, size__gte=2) \
-            .order_by('-size')[:5]
+            .order_by('-size')[:8]
 
             for cluster in top_stories:
                 cluster.top_story_on = today

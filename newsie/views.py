@@ -9,7 +9,7 @@ from rest_framework.exceptions import APIException
 
 class ExclusiveStoriesView(generics.ListAPIView):
     last_36_hours = timezone.make_aware(datetime.today() - timedelta(hours=36))
-    queryset = ArticleCluster.objects.exclude(top_story_on__gte=last_36_hours).order_by('-most_recent_pub_date')
+    queryset = ArticleCluster.objects.exclude(top_story_on__gte=last_36_hours).order_by('-most_recent_pub_date', 'id')
     serializer_class = serializers.ArticleClusterSerializer
     pagination_class = LimitOffsetPagination
 
@@ -39,7 +39,7 @@ class TopStoriesView(generics.ListAPIView):
 
     def get_queryset(self, date_range=''):
         order_by_string = f"-{date_range}" if date_range != '' else "-size_today"
-        queryset = ArticleCluster.objects.filter(size__gte=2).order_by(order_by_string)[:5]
+        queryset = ArticleCluster.objects.filter(size__gte=2).order_by(order_by_string)[:8]
 
         return queryset
 
