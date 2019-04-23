@@ -5,12 +5,23 @@ import TopStories from './TopStories/TopStories'
 import ExclusiveStories from './ExclusiveStories/ExclusiveStories'
 
 
-const Main = () => (
+const Main = (props) => (
+  
   <main>
     <Switch>
       <Route exact path='/' component={RedirectToTopStores}/>
-      <Route path='/top-stories' component={TopStories}/>
-      <Route path='/exclusive-stories' component={ExclusiveStories}/>
+      <Route
+        path='/top-stories'
+        render={(routeProps) => (
+          <TopStories {...routeProps} filters={props.filters} />
+        )}
+      />
+      <Route
+        path='/exclusive-stories'
+        render={(routeProps) => (
+          <ExclusiveStories {...routeProps} filters={props.filters} />
+        )}
+      />
     </Switch>
   </main>
 )

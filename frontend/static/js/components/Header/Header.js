@@ -25,7 +25,7 @@ class Header extends Component {
           <Tab title='Exclusive Stories'>
           </Tab>
         </Tabs>
-        <CategoryFilter />
+        <CategoryFilter filters={this.props.filters} updateFilters={this.props.updateFilters}/>
       </Box>
     );
   }

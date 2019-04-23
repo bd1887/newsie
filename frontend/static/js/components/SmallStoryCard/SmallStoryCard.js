@@ -19,6 +19,10 @@ class SmallStoryCard extends Component {
   }
 
   render() {
+    if (this.props.filters) {
+      if (this.props.filters.length !== 0 && !this.props.filters.includes(this.props.category)) {return null}
+    }
+    
     let className = `small-story-box ${categories[this.props.category]}`
     console.log(className)
     return (

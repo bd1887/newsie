@@ -21,9 +21,9 @@ class CategoryFilter extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-            selected: [],
-          }
+        // this.state = {
+        //     selected: [],
+        //   }
           this.clickHandler = this.clickHandler.bind(this)
       }
 
@@ -47,11 +47,11 @@ class CategoryFilter extends Component {
             renderRightArrow={renderRightArrow}
         >
             {Object.keys(categories).map((key, index) => {
-                let selectedCategories = this.state.selected;
+                let selectedCategories = this.props.filters;
                 let className = `
                 ${selectedCategories.length == 0 ? 'default-selected' : selectedCategories.includes(key) ? '' : 'deselected'} ${categories[key]} menu-item
                 `
-                return (<FilterOption key={key} category={key} className={className} clickHandler={this.clickHandler}/>)
+                return (<FilterOption key={key} category={key} className={className} clickHandler={this.props.updateFilters}/>)
             })}
         </ComponentSlider>
         </div>

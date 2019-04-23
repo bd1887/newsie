@@ -57,6 +57,7 @@ class TopStories extends Component {
       return (<p>loading...</p>)
     } else {
       const storyCards = this.state.storyList.map(story => {
+        if  (this.props.filters.length == 0 || this.props.filters.includes(story.category))
         return <TopStoryCard
             key={story.id}
             id={story.id}

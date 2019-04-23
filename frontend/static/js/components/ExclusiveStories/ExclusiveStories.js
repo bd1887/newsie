@@ -33,7 +33,6 @@ class ExclusiveStories extends Component {
   }
 
   onStoryCardClick(id) {
-    console.log(this.state.storyList)
     let story = this.state.storyList.filter(story => {
       return story.id === id
     })
@@ -78,6 +77,7 @@ class ExclusiveStories extends Component {
           >
             {(story) => (
               <SmallStoryCard
+                filters={this.props.filters}
                 key={story.id}
                 id={story.id}
                 title={story.articles[0].title}
