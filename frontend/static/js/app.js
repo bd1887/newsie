@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Box, Grommet } from 'grommet'
-import Header from './components/Header/Header';
-import Main from './components/Main';
+import Header from './Header/Header';
+import Main from './Main';
 
 const theme = {
   global: {

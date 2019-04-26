@@ -39,7 +39,7 @@ class TopStoriesView(generics.ListAPIView):
 
     def get_queryset(self, date_range=''):
         order_by_string = f"-{date_range}" if date_range != '' else "-size_today"
-        queryset = ArticleCluster.objects.filter(size__gte=2).order_by(order_by_string)[:8]
+        queryset = ArticleCluster.objects.filter(size__gte=2).order_by(order_by_string)[:15]
 
         return queryset
 

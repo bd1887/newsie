@@ -20,22 +20,25 @@ def rss_scraper(rss_url, category):
     items = soup.find_all("item") #Each <item> tag corresponds to one article
 
     for item in items:
-        article_url = strip_tags(item.find_all("link")) #<link> tag holds the article url
+        try:
+            article_url = strip_tags(item.find_all("link")) #<link> tag holds the article url
 
-        #Creates a NewsPlease object which automatically extracts information from article
-        art = NewsPlease.from_url(article_url)
+            #Creates a NewsPlease object which automatically extracts information from article
+            art = NewsPlease.from_url(article_url)
 
-        ###NewsPlease attempts to extract the following information from the article: ###
-        pub_date = datetime.datetime.combine(art.date_publish, datetime.time.min, timezone.utc)
-        title = art.title
-        description = art.description if art.description != None else ''
-        body = art.text if art.text != None else ''
-        img = art.image_url if art.image_url != None else ''
-        ###
+            ###NewsPlease attempts to extract the following information from the article: ###
+            pub_date = datetime.datetime.combine(art.date_publish, datetime.time.min, timezone.utc)
+            title = art.title
+            description = art.description if art.description != None else ''
+            body = art.text if art.text != None else ''
+            img = art.image_url if art.image_url != None else ''
+            ###
 
-        article = Article(url=article_url, title=art.title, body=body, description=description, img=img, pub_date=pub_date, category=category, labeled=labeled)
-        print(article.category, ' | ' ,article.title)
-        articles.append(article)
+            article = Article(url=article_url, title=art.title, body=body, description=description, img=img, pub_date=pub_date, category=category, labeled=labeled)
+            print(article.category, ' | ' ,article.title)
+            articles.append(article)
+        except Exception as e:
+            print(f"Failed to retrieve item {item} with message" + repr(e))
 
     #Preprocesses, tokenizes, and gets trigrams from article text and saves it to Article object
     articles = tokenize(articles)

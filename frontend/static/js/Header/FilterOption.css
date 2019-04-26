@@ -1,0 +1,115 @@
+.menu-item {
+    margin-left: .4rem;
+    margin-right: .4rem;
+    width: 14.2rem;
+    display: inline-block;
+    padding: 15px 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    text-align: center;
+    border-width: 2px;
+    border-radius: 8px;
+  }
+
+.sports {
+    border-style: none;
+    border-color: #F17105;
+    background-color: #F17105;
+    color: #ffffff;
+}
+
+.business-and-finance {
+    border-style: none;
+    border-color: #283D3B;
+    background-color: #283D3B;
+    color: #ffffff;
+}
+
+
+.ireland {
+    border-style: none;
+    border-color: #0E9C62;
+    background-color: #0E9C62;
+    color: #ffffff;
+}
+
+
+.entertainment {
+    border-style: none;
+    border-color: #C4E7D4;
+    background-color: #C4E7D4;
+    color: #ffffff;
+}
+
+
+.health {
+    border-style: none;
+    border-color: #DE1A1A;
+    background-color: #DE1A1A;
+    color: #ffffff;
+}
+
+
+.education {
+    border-style: none;
+    border-color: #F3B3A6;
+    background-color: #F3B3A6;
+    color: #ffffff;
+}
+
+
+.world {
+    border-style: none;
+    border-color: #415A77;
+    background-color: #415A77;
+    color: #ffffff;
+}
+
+
+
+.default-selected {
+    border-style: solid;
+    background-color: #fff;
+    color: #000;
+}
+/* .selected {
+    background
+} */
+
+.deselected {
+    border-style: none;
+    color: #000;
+    background-color: lightgray;
+}
+
+@media (hover: hover) {
+    .sports:hover {
+        background-color: #F17105;
+        color: #ffffff;
+    }
+    .business-and-finance:hover {
+        background-color: #283D3B;
+        color: #fff;
+    }
+    .ireland:hover {
+        background-color: #0E9C62;
+        color: #fff;
+    }
+    .entertainment:hover {
+        background-color: #C4E7D4;
+        color: #ffffff;
+    }
+    .health:hover {
+        background-color: #DE1A1A;
+        color: #ffffff;
+    }
+    .education:hover {
+        background-color: #F3B3A6;
+        color: #ffffff;
+    }
+    .world:hover {
+        background-color: #415A77;
+        color: #fff;
+    }
+
+}
