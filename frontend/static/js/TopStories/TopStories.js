@@ -4,7 +4,7 @@ import './TopStories.css'
 import TopStoryCard from './TopStoryCard'
 import ArticleModal from '../Shared/ArticleModal';
 import Masonry from 'react-masonry-component';
-import Media from "react-media";
+import MediaQuery from "react-responsive";
 import { Link } from 'react-router-dom';
 
 const masonryOptions = {
@@ -74,15 +74,15 @@ class TopStories extends Component {
     } else {
       
       return(
-        <Media query={{ maxWidth: 599 }}>
-          {matches =>
-            matches ? (
-              this.getMobileView()
-            ) : (
-              this.getMasonry()
-            )
-          }
-        </Media>
+        <MediaQuery minDeviceWidth={813} minWidth={813}>
+          {(matches) => {
+            if (matches) {
+              return this.getMasonry();
+            } else {
+              return this.getMobileView();
+            }
+          }}
+        </MediaQuery>
       )
     }
   }
