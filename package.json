@@ -41,6 +41,7 @@
     "react": "^16.8.6",
     "react-css-modules": "^4.7.9",
     "react-dom": "^16.8.6",
+    "react-dragscroll": "^2.0.1",
     "react-masonry-component": "^6.2.1",
     "react-responsive": "^6.1.1",
     "react-router-dom": "^5.0.0",

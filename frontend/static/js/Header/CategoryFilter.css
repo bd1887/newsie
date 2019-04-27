@@ -1,4 +1,5 @@
 .component-slider {
+  margin-top: 1rem;
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -33,11 +34,13 @@
   left: 0;
 }
 
-/*custom styles*/
-.meun-bar {
-  text-align: center;
-  border: 1px solid gray;
+.drag-scroll {
+  margin-top: 1rem;
+  position: relative;
   width: 100%;
+  overflow: scroll;
+  white-space: nowrap;
 }
-
-
+.drag-scroll ::-webkit-scrollbar {
+  display: none;
+}

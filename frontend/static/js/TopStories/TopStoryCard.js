@@ -5,7 +5,7 @@ import './TopStoryCard.css'
 const categories = {
     'Sports': 'sports-top-story',
     'Business and Finance': 'business-and-finance-top-story',
-    'Ireland': -'ireland-top-story',
+    'Ireland': 'ireland-top-story',
     'Entertainment': 'entertainment-top-story',
     'Health': 'health-top-story',
     'Education': 'education-top-story',
@@ -44,19 +44,26 @@ class TopStoryCard extends Component {
                 <Text
                     className='headline card-text'
                     gridArea="titleArea"
-                    size="medium"
-                >{this.props.title}</Text>
+                    // size="medium"
+                >{this.truncateText(this.props.title, 55)}</Text>
                 <Text
                     className='description card-text'
                     gridArea="descriptionArea"
-                    size="small"
+                    // size="small"
                     alignSelf="start"
-                >{this.props.description}</Text>
+                >{this.truncateText(this.props.description, 80)}</Text>
 
             </Grid>
         
         </Box>
       )
+  }
+
+  truncateText(str, maxLength) {
+      if (str.length > maxLength) {
+          return str.substring(0, maxLength) + '...'
+      }
+      return str;
   }
 
 }

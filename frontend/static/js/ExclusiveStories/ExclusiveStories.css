@@ -4,8 +4,9 @@
     margin-right: auto;
 }
 
-@media screen and (max-width: 920px) {
-    .infinite-scroll-box {
-      width: 100%;
-    }
-  }
+@media only screen 
+    and (max-width : 950px) {
+        .infinite-scroll-box {
+            width: 100%;
+        }
+    } 

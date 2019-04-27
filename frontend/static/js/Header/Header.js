@@ -17,7 +17,7 @@ class Header extends Component {
   
   render() {
     return (
-      <Box className="header">
+      <Box flex={true} className="header">
         <Text margin="none" size="large" weight="bold" style={{ cursor: 'default'}}>NEW<Article></Article>SIE</Text>
         <Tabs className="stories-tab" onActive={(i) => this.tabOnActiveHandler(i)} alignSelf='center'>
           <Tab title='Top Stories'>

@@ -1,14 +1,17 @@
 .menu-item {
     margin-left: .4rem;
     margin-right: .4rem;
+    height: 3rem;
     width: 14.2rem;
     display: inline-block;
-    padding: 15px 10px;
     cursor: pointer;
     text-transform: uppercase;
     text-align: center;
     border-width: 2px;
     border-radius: 8px;
+  }
+  .menu-item-text {
+    line-height: 3rem;
   }
 
 .sports {
@@ -65,22 +68,29 @@
     color: #ffffff;
 }
 
-
-
 .default-selected {
     border-style: solid;
     background-color: #fff;
     color: #000;
 }
-/* .selected {
-    background
-} */
 
 .deselected {
-    border-style: none;
+    /* border-style: none; */
     color: #000;
     background-color: lightgray;
 }
+
+@media only screen 
+    and (max-width : 950px) {
+        .menu-item {
+            width: 16rem;
+            height: 4rem;
+        }
+        .menu-item-text {
+            font-size: 1.3rem;
+            line-height: 4rem;
+          }
+    } 
 
 @media (hover: hover) {
     .sports:hover {
@@ -111,5 +121,4 @@
         background-color: #415A77;
         color: #fff;
     }
-
 }

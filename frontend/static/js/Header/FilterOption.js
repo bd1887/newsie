@@ -14,9 +14,11 @@ class FilterOption extends Component {
     return (
         <Box
             className={this.props.className}
+            align="center"
             onClick={() => {this.props.clickHandler(this.props.category)}}
         >
         <Text
+        className="menu-item-text"
         size="medium"
         weight="bold"
         >

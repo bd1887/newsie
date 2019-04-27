@@ -25,7 +25,7 @@ class App extends Component {
 
   render() {
     return (
-      <Grommet padding="small" theme={theme} >
+      <Grommet theme={theme}>
         <Box>
           <Header
             updateFilters={this.updateFilters}

@@ -6,6 +6,15 @@
     transition: all .3s .1s;
 }
 
+.card-text {
+    color: #fff;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+    height: 100%;
+}
+.description {
+    overflow: hidden;
+}
+
 .sports-top-story{
     border-color: #F17105;
 }
@@ -55,49 +64,71 @@
     box-shadow: 0px 0px 15px 1px rgba(65,90,119,0.75);
 }
 
-.card-text {
-    color: #fff;
-    /* text-shadow: 0px 0px 30px rgba(0, 0, 0, 1); */
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-}
+
 
 .lg-box {
     width: 39%;
     height: 40rem;
 }
+.lg-box .headline {
+    font-size: 2.6rem;
+    line-height: 2.6rem;
+}
+.lg-box .description {
+    font-size: 2.2rem;
+    line-height: 2.2rem;
+}
+
 .md-box {
     width: 19%;
     height: 19rem;
-
 }
+.md-box .headline {
+    font-size: 2rem;
+    line-height: 2rem;
+}
+.md-box .description {
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+}
+
 .sm-box {
     width: 19%;
     height: 10rem;
 }
+.sm-box .headline {
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+    text-align: center;
+}
+.sm-box .description {
+    display: none;
+}
 
 .mobile-box {
     width: 100%;
-    height: 20rem;
+    height: 45vh;
 }
+.mobile-box .headline {
+    font-size: 2rem;
+    line-height: 2rem;
+}
+.mobile-box .description {
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+}
+
 .mobile-box:hover {
     box-shadow: none;
 }
 
-/* .md-screen-box-lg {
-    width: 
-} */
-
+.headline-container {
+    text-overflow: ellipsis;
+    height: 100px;
+    width: 100px;
+}
 .grid {
     padding: 10px;
     border-radius: 12px;
     background-color: rgba(0, 0, 0, .25);
-    overflow: hidden;
 }
-/* 
-@media only screen and (max-width: 900px) {
-    .lg-box
-    .md-box
-    .sm-box {
-       display: none !important;
-    }
-  }  */

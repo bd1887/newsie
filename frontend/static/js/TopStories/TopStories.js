@@ -13,7 +13,6 @@ const masonryOptions = {
   horizontalOrder: false,
   columnWidth: 1,
   gutter: 5,
-  // fitWidth: true,
 };
 
 class TopStories extends Component {
@@ -74,12 +73,12 @@ class TopStories extends Component {
     } else {
       
       return(
-        <MediaQuery minDeviceWidth={813} minWidth={813}>
+        <MediaQuery maxWidth={950}>
           {(matches) => {
             if (matches) {
-              return this.getMasonry();
-            } else {
               return this.getMobileView();
+            } else {
+              return this.getMasonry();
             }
           }}
         </MediaQuery>
