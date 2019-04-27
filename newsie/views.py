@@ -23,7 +23,7 @@ class TopStoriesView(generics.ListAPIView):
             'today': 'size_today',
             'this_week': 'size_this_week',
             'this_month': 'size_this_month',
-            'all': 'size',
+            'all_time': 'size',
         }
         date_range_query = request.GET.get('date_range', '')
         date_range_string = ''

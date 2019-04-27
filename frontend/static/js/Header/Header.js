@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
-import { Article } from 'grommet-icons';
-import { Box, Tab, Tabs, Text } from 'grommet';
+import { Article, Calendar, Close } from 'grommet-icons';
+import { Box, Select, Tab, Tabs, Text } from 'grommet';
 import CategoryFilter from './CategoryFilter';
 import './Header.css';
 
 // The Header creates tabs that can be used to navigate
 // between routes.
+
+const dateRangeOptions = ['Today', 'This Week', 'This Month', "All Time"]
+
 class Header extends Component {
 
   constructor(props) {
@@ -18,7 +21,7 @@ class Header extends Component {
   render() {
     return (
       <Box flex={true} className="header">
-        <Text margin="none" size="large" weight="bold" style={{ cursor: 'default'}}>NEW<Article></Article>SIE</Text>
+        <Text className="brand" margin="none" size="large" weight="bold" style={{ cursor: 'default'}}>NEW<Article></Article>SIE</Text>
         <Tabs className="stories-tab" onActive={(i) => this.tabOnActiveHandler(i)} alignSelf='center'>
           <Tab title='Top Stories'>
           </Tab>
@@ -26,6 +29,17 @@ class Header extends Component {
           </Tab>
         </Tabs>
         <CategoryFilter filters={this.props.filters} updateFilters={this.props.updateFilters}/>
+
+        <div className="date-container">
+          <Select
+            margin="xsmall"
+            size="small"
+            options={dateRangeOptions}
+            value= {<Text className="date-range-text"><Calendar className="calendar"/>{this.props.dateRange}</Text>}
+            onChange={({ option }) => this.props.updateDateRange(option)}
+          />
+        </div>  
+
       </Box>
     );
   }

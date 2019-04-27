@@ -1,8 +1,22 @@
 .header {
-    padding: 1rem;
+    padding: 1rem 1rem .3rem 1rem;
     width: 100%;
     background-color: #fff;
     position: sticky;
     top: 0;
     z-index: 5;
+}
+.date-container {
+    width: fit-content;
+    margin: 0 auto 0 auto;
+    text-align: center;
+}
+
+.date-range-text {
+    padding: 5px;
+    width: 8rem;
+}
+.calendar {
+    vertical-align: sub;
+    float: left;
 }

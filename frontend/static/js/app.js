@@ -18,9 +18,11 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      filters: []
+      filters: [],
+      dateRange: 'Today'
     }
     this.updateFilters = this.updateFilters.bind(this)
+    this.updateDateRange = this.updateDateRange.bind(this)
   }
 
   render() {
@@ -29,9 +31,11 @@ class App extends Component {
         <Box>
           <Header
             updateFilters={this.updateFilters}
+            updateDateRange={this.updateDateRange}
             filters={this.state.filters}
+            dateRange={this.state.dateRange}
             />
-          <Main filters={this.state.filters}/>
+          <Main filters={this.state.filters} dateRange={this.state.dateRange}/>
         </Box>
       </Grommet>
     );
@@ -46,6 +50,10 @@ class App extends Component {
           filterArray.push(key)
             return this.setState({filters: filterArray})
         }
+  }
+
+  updateDateRange(option) {
+    this.setState({dateRange: option})
   }
 
 }

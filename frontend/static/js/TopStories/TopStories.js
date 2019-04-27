@@ -24,7 +24,8 @@ class TopStories extends Component {
       loading: true,
       showModal: false,
       selectedStory: null,
-      articleCount: 0
+      articleCount: 0,
+      dateRange: 'Today'
     }
     this.getData = this.getData.bind(this)
     this.onStoryCardClick = this.onStoryCardClick.bind(this)
@@ -32,7 +33,14 @@ class TopStories extends Component {
   }
 
   componentWillMount () {
-    this.getData();
+    this.getData('Today');
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.dateRange !== this.state.dateRange) {
+      this.getData(newProps.dateRange)
+      this.setState({dateRange: newProps.dateRange})
+    }
   }
 
   setShow(bool) {
@@ -46,10 +54,10 @@ class TopStories extends Component {
     this.setState({ selectedStory: story[0], showModal: true })
   }
 
-  getData() {
-    axios.get('/api/top-stories/?date_range=this_month')
+  getData(dateRange) {
+    dateRange = dateRange.toLowerCase().replace(' ', '_')
+    axios.get('/api/top-stories/?date_range=' + dateRange)
     .then(response => {
-      console.log(response.data)
       let articleCount = this.getArticleCount(response.data)
       this.setState({   
         storyList: response.data,
@@ -68,6 +76,7 @@ class TopStories extends Component {
   }
 
   render() {
+    console.log(this.state.dateRange)
     if (this.state.loading) {
       return (<p>loading...</p>)
     } else {
@@ -112,12 +121,8 @@ class TopStories extends Component {
             <ArticleModal setShow={this.setShow} story={this.state.selectedStory}/>
           )}
           <Masonry
-                 // default ''
-                elementType={'div'} // default 'div'
-                options={masonryOptions} // default {}
-                disableImagesLoaded={false} // default false
-                updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
-                // imagesLoadedOptions={imagesLoadedOptions} // default {}
+                options={masonryOptions}
+                enableResizableChildren={true}
             >
                 {storyCards}
           </Masonry>

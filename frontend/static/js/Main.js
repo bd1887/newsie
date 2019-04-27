@@ -13,7 +13,7 @@ const Main = (props) => (
       <Route
         path='/top-stories'
         render={(routeProps) => (
-          <TopStories {...routeProps} filters={props.filters} />
+          <TopStories {...routeProps} filters={props.filters} dateRange={props.dateRange}/>
         )}
       />
       <Route
