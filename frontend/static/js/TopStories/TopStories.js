@@ -186,9 +186,9 @@ class TopStories extends Component {
 
   noResultsFound() {
     return (
-      <Box align="center" alignSelf="center" style={{maxWidth: "100vw"}}>
+      <Box align="center" alignSelf="center" fill="horizontal">
         <Text size="xxlarge" color="light-4">No results found.</Text>
-        <Gremlin size="xxlarge" color="light-3" />
+        <Gremlin size="xlarge" color="light-3" />
         <Text size="xxlarge" color="light-4" alignSelf="center">Try adjusting the filters.</Text>
       </Box>
     )
