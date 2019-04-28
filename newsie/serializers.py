@@ -13,7 +13,7 @@ class ArticleClusterSerializer(serializers.ModelSerializer):
     articles = serializers.SerializerMethodField()
     class Meta:
         model = ArticleCluster
-        fields = ('id', 'category', 'size_today', 'size_this_week', 'most_recent_pub_date', 'articles')
+        fields = ('id', 'category', 'size' ,'size_today', 'size_this_week','size_this_month', 'most_recent_pub_date', 'articles')
 
     def get_articles(self, instance):
         # Get related articles; order_by most recent first

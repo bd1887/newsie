@@ -5,10 +5,14 @@ import TopStoryCard from './TopStoryCard'
 import ArticleModal from '../Shared/ArticleModal';
 import Masonry from 'react-masonry-component';
 import MediaQuery from "react-responsive";
+import { Box, Text } from 'grommet';
+import { Gremlin } from 'grommet-icons';
 import { Link } from 'react-router-dom';
 
 const masonryOptions = {
-  transitionDuration: 0,
+  transitionDuration: '.4s',
+  stagger: '.03s',
+  resize: false,
   personPosition: true,
   horizontalOrder: false,
   columnWidth: 1,
@@ -76,21 +80,26 @@ class TopStories extends Component {
   }
 
   render() {
-    console.log(this.state.dateRange)
     if (this.state.loading) {
       return (<p>loading...</p>)
     } else {
       
       return(
-        <MediaQuery maxWidth={950}>
-          {(matches) => {
-            if (matches) {
-              return this.getMobileView();
-            } else {
-              return this.getMasonry();
-            }
-          }}
-        </MediaQuery>
+        <Box className="top-stories-container">
+        {this.state.showModal && (
+            <ArticleModal setShow={this.setShow} story={this.state.selectedStory}/>
+          )}
+          <MediaQuery maxWidth={950}>
+            {(matches) => {
+              if (matches) {
+                return this.getMobileView();
+              } else {
+                return this.getMasonry();
+              }
+            }}
+          </MediaQuery>
+        </Box>
+        
       )
     }
   }
@@ -115,25 +124,23 @@ class TopStories extends Component {
             boxSize = {boxSize}
           />
       })
+      let storyCardsAreEmpty = this.areStoryCardsEmpty(storyCards)
+      if (storyCardsAreEmpty) {
+        return this.noResultsFound()
+      }
       return (
-        <div className="top-stories-container">
-          {this.state.showModal && (
-            <ArticleModal setShow={this.setShow} story={this.state.selectedStory}/>
-          )}
           <Masonry
+                className="masonry"
                 options={masonryOptions}
                 enableResizableChildren={true}
             >
                 {storyCards}
           </Masonry>
-        </div>
-        
       )
   }
 
   getMobileView() {
-      return (
-        this.state.storyList.map(story => {
+      let storyCards = this.state.storyList.map(story => {
           let boxSize = 'mobile-box'
   
           if  (this.props.filters.length == 0 || this.props.filters.includes(story.category))
@@ -149,7 +156,34 @@ class TopStories extends Component {
               boxSize = {boxSize}
             />
         })
-      )
+
+      let storyCardsAreEmpty = this.areStoryCardsEmpty(storyCards)
+      if (storyCardsAreEmpty) {
+        return this.noResultsFound()
+      }
+      return storyCards
+
+
+  }
+
+  areStoryCardsEmpty(arr) {
+    let definedElement = arr.find((el) => {
+      return el !== undefined
+    })
+    if (definedElement) {
+      return false;
+    }
+    return true;
+  }
+
+  noResultsFound() {
+    return (
+      <Box align="center" alignSelf="center">
+        <Text size="xxlarge" color="light-4">No results found.</Text>
+        <Gremlin size="xxlarge" color="light-3" />
+        <Text size="xxlarge" color="light-4">Try adjusting the filters.</Text>
+      </Box>
+    )
   }
 
 }

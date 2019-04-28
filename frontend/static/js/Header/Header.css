@@ -6,6 +6,13 @@
     top: 0;
     z-index: 5;
 }
+
+.brand {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+}
+
 .date-container {
     width: fit-content;
     margin: 0 auto 0 auto;

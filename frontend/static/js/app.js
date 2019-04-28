@@ -26,9 +26,10 @@ class App extends Component {
   }
 
   render() {
+
     return (
       <Grommet theme={theme}>
-        <Box>
+        {/* <Box> */}
           <Header
             updateFilters={this.updateFilters}
             updateDateRange={this.updateDateRange}
@@ -36,7 +37,7 @@ class App extends Component {
             dateRange={this.state.dateRange}
             />
           <Main filters={this.state.filters} dateRange={this.state.dateRange}/>
-        </Box>
+        {/* </Box> */}
       </Grommet>
     );
   }

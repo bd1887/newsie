@@ -17,8 +17,8 @@ class Header extends Component {
     this.tabOnActiveHandler = this.tabOnActiveHandler.bind(this)
   }
 
-  
   render() {
+    let currentPath = this.props.location.pathname
     return (
       <Box flex={true} className="header">
         <Text className="brand" margin="none" size="large" weight="bold" style={{ cursor: 'default'}}>NEW<Article></Article>SIE</Text>
@@ -30,16 +30,17 @@ class Header extends Component {
         </Tabs>
         <CategoryFilter filters={this.props.filters} updateFilters={this.props.updateFilters}/>
 
-        <div className="date-container">
-          <Select
-            margin="xsmall"
-            size="small"
-            options={dateRangeOptions}
-            value= {<Text className="date-range-text"><Calendar className="calendar"/>{this.props.dateRange}</Text>}
-            onChange={({ option }) => this.props.updateDateRange(option)}
-          />
-        </div>  
-
+        {currentPath.includes('/top-stories') && (
+            <div className="date-container">
+            <Select
+              margin="xsmall"
+              size="small"
+              options={dateRangeOptions}
+              value= {<Text className="date-range-text"><Calendar className="calendar"/>{this.props.dateRange}</Text>}
+              onChange={({ option }) => this.props.updateDateRange(option)}
+            />
+          </div>  
+        )}
       </Box>
     );
   }

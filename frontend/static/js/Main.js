@@ -4,7 +4,6 @@ import RedirectToTopStores from './Shared/RedirectToTopStories'
 import TopStories from './TopStories/TopStories'
 import ExclusiveStories from './ExclusiveStories/ExclusiveStories'
 
-
 const Main = (props) => (
   
   <main>

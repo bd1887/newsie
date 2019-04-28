@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Box, InfiniteScroll, Text } from 'grommet';
+import { Gremlin } from 'grommet-icons';
 import './ExclusiveStories.css';
 
 import SmallCard from '../Shared/SmallCard';
@@ -16,17 +17,26 @@ class ExclusiveStories extends Component {
       storyList: [],
       loading: true,
       showModal: false,
-      selectedStory: null
+      selectedStory: null,
     }
+    this.filters = this.props.filters
     this.offset = 0;
     this.getData = this.getData.bind(this)
+    this.getMoreData = this.getMoreData.bind(this)
     this.setShow = this.setShow.bind(this)
     this.onStoryCardClick = this.onStoryCardClick.bind(this)
-    this.getMoreData = this.getMoreData.bind(this)
   }
 
   componentWillMount () {
-    this.getData();
+    this.getData(this.props.filters);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!this.arraysEqual(newProps.filters, this.filters)) {
+      this.setState({storyList: [], loading: true})
+      this.offset = 0;
+      this.getData(newProps.filters)
+    }
   }
 
   setShow(bool) {
@@ -40,26 +50,35 @@ class ExclusiveStories extends Component {
     this.setState({ selectedStory: story[0], showModal: true })
   }
 
-  getData() {
-    axios.get('/api/exclusive-stories/?limit=10&offset=0')
+  getData(filters) {
+    let filters_query = filters && filters.length ? '&categories=' + filters.join(',') : ''
+    let query = '/api/exclusive-stories/?limit=20&offset=' + this.offset + filters_query
+    axios.get(query)
     .then(response => {
       this.setState({   
         storyList: response.data.results,
         loading: false
       })
+      this.filters = []
+      this.filters = this.filters.concat(filters)
+      this.offset += 20
     })
   }
 
   getMoreData() {
-    this.offset += 10;
-    axios.get('/api/exclusive-stories/?limit=10&offset=' + this.offset)
+    let filters = this.props.filters
+    let filters_query = filters && filters.length ? '&categories=' + filters.join(',') : ''
+    let query = '/api/exclusive-stories/?limit=20&offset=' + this.offset + filters_query
+    axios.get(query)
     .then(response => {
-      this.setState({
-        storyList: this.state.storyList.slice().concat(response.data.results)
-      });
-      
+      this.setState({   
+        storyList: this.state.storyList.slice().concat(response.data.results),
+      })
+      this.offset += 20
     })
   }
+
+  arraysEqual(a,b) { return !!a && !!b && !(a<b || b<a); }
 
   render() {
     if (this.state.loading) {
@@ -71,14 +90,29 @@ class ExclusiveStories extends Component {
           {this.state.showModal && (
             <ArticleModal setShow={this.setShow} story={this.state.selectedStory}/>
           )}
-          
-          <InfiniteScroll items={this.state.storyList}
-            step={7}
+          {this.getInfiniteScroll(this.state.storyList)}
+
+          <Box align="center" alignSelf="center">
+            <Text size="xlarge" color="light-4">The End.</Text>
+            <Gremlin size="xlarge" color="light-3" />
+            <Text size="large" color="light-4">There are no more articles about this topic.</Text>
+          </Box>
+
+        </Box>
+      )
+      
+    }
+
+  }
+
+  getInfiniteScroll(storyList) {
+    return (
+      <InfiniteScroll items={storyList}
+            step={10}
             onMore={this.getMoreData}
           >
             {(story) => (
               <SmallCard
-                filters={this.props.filters}
                 key={story.id}
                 id={story.id}
                 title={story.articles[0].title}
@@ -89,12 +123,9 @@ class ExclusiveStories extends Component {
               />
             )}
           </InfiniteScroll>
-        </Box>
-      )
-      
-    }
-
+    )
   }
+
 }
 
 export default ExclusiveStories

@@ -8,10 +8,20 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.exceptions import APIException
 
 class ExclusiveStoriesView(generics.ListAPIView):
-    last_36_hours = timezone.make_aware(datetime.today() - timedelta(hours=36))
-    queryset = ArticleCluster.objects.exclude(top_story_on__gte=last_36_hours).order_by('-most_recent_pub_date', 'id')
     serializer_class = serializers.ArticleClusterSerializer
     pagination_class = LimitOffsetPagination
+
+    def get_queryset(self):
+        categories = self.request.query_params.get('categories')
+        last_36_hours = timezone.make_aware(datetime.today() - timedelta(hours=36))
+        queryset = ArticleCluster.objects.exclude(top_story_on__gte=last_36_hours).order_by('-most_recent_pub_date', '-size_today', '-size', 'id')
+
+        if categories is not None:
+            filtered_queryset = ''
+            filters_array = categories.split(',')
+            queryset = queryset.filter(category__in=filters_array)
+
+        return queryset
 
 
 class TopStoriesView(generics.ListAPIView):
