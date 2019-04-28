@@ -82,7 +82,12 @@ class ExclusiveStories extends Component {
 
   render() {
     if (this.state.loading) {
-      return (<p>loading...</p>)
+      return(
+        <Box pad="large" align="center" alignSelf="center" flex={true}>
+          <Text size="large" color="light-4">LOADING...</Text>
+          <Gremlin size="large" color="light-3" />
+        </Box>
+      )
     } else {
       return (
         <Box className="infinite-scroll-box">

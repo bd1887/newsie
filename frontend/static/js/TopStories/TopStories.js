@@ -81,7 +81,13 @@ class TopStories extends Component {
 
   render() {
     if (this.state.loading) {
-      return (<p>loading...</p>)
+      return(
+        <Box pad="large" align="center" alignSelf="center" flex={true}>
+          <Text size="large" color="light-4">LOADING...</Text>
+          <Gremlin size="large" color="light-3" />
+        </Box>
+      )
+      
     } else {
       
       return(
@@ -92,7 +98,9 @@ class TopStories extends Component {
           <MediaQuery maxWidth={950}>
             {(matches) => {
               if (matches) {
-                return this.getMobileView();
+                return (
+                    this.getMobileView()
+                )
               } else {
                 return this.getMasonry();
               }
@@ -178,10 +186,10 @@ class TopStories extends Component {
 
   noResultsFound() {
     return (
-      <Box align="center" alignSelf="center">
+      <Box align="center" alignSelf="center" width="medium">
         <Text size="xxlarge" color="light-4">No results found.</Text>
         <Gremlin size="xxlarge" color="light-3" />
-        <Text size="xxlarge" color="light-4">Try adjusting the filters.</Text>
+        <Text size="xxlarge" color="light-4" alignSelf="center">Try adjusting the filters.</Text>
       </Box>
     )
   }

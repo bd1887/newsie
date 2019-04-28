@@ -36,7 +36,10 @@ class App extends Component {
             filters={this.state.filters}
             dateRange={this.state.dateRange}
             />
-          <Main filters={this.state.filters} dateRange={this.state.dateRange}/>
+          <Main
+            filters={this.state.filters}
+            dateRange={this.state.dateRange}
+            />
         {/* </Box> */}
       </Grommet>
     );

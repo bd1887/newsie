@@ -11,6 +11,7 @@ class ArticleModal extends Component {
   constructor(props) {
     super(props)
     this.onStoryCardClick = this.onStoryCardClick.bind(this)
+    this.closeModal = this.closeModal.bind(this)
   }
 
   onStoryCardClick(id) {
@@ -18,6 +19,16 @@ class ArticleModal extends Component {
       return article.id === id
     })
     window.open(article[0].url, "_blank")
+  }
+
+  componentDidMount() {
+    // document.body.style.overflowY = "hidden";
+    console.log(document.body.scrollTop)
+  }
+
+  closeModal() {
+    // document.body.style.overflowY = "inherit";
+    this.props.setShow(false)
   }
 
   render() {
@@ -36,19 +47,20 @@ class ArticleModal extends Component {
   getMobileView() {
       return (
         <Layer
+          responsive={false}
           full={true}
-          onEsc={() => this.props.setShow(false)}
-          onClickOutside={() => this.props.setShow(false)}
+          onEsc={() => this.closeModal()}
+          onClickOutside={() => this.closeModal()}
           >
           <Box 
-            onClick={() => this.props.setShow(false)}
+            onClick={() => this.closeModal()}
             className="close-modal-mobile">
             <Close color="light-1"/>
           </Box>
-          <Box
+          {/* <Box
             pad="medium"
             overflow="scroll"
-          >
+          > */}
             <InfiniteScroll items={this.props.story.articles}
               step={7}
             >
@@ -70,7 +82,7 @@ class ArticleModal extends Component {
               <Text size="large" color="light-4">There are no more articles about this topic.</Text>
             </Box>
 
-          </Box>
+          {/* </Box> */}
         </Layer>
     );
   }
@@ -79,11 +91,11 @@ class ArticleModal extends Component {
       return (
         <Layer
           rounded="small"
-          onEsc={() => this.props.setShow(false)}
-          onClickOutside={() => this.props.setShow(false)}
+          onEsc={() => this.closeModal()}
+          onClickOutside={() => this.closeModal()}
           >
           <Box 
-            onClick={() => this.props.setShow(false)}
+            onClick={() => this.closeModal()}
             className="close-modal">
             <Close color="light-1"/>
           </Box>
