@@ -22,7 +22,7 @@ class Header extends Component {
 
   render() {
     let currentPath = this.props.location.pathname
-    let showFiltersStyle = this.state.showFilters ? {maxHeight: 1000} : {maxHeight: 0}
+    let showFiltersStyle = this.state.showFilters ? {maxHeight: '1000px'} : {maxHeight: 0}
     return (
       <Box flex={true} className="header">
         <Text className="brand" margin="none" size="large" weight="bold" style={{ cursor: 'default'}}>NEW<Article></Article>SIE</Text>
@@ -34,7 +34,7 @@ class Header extends Component {
         </Tabs>
 
         <Box className="filters-container" style={showFiltersStyle}>
-          <CategoryFilter filters={this.props.filters} updateFilters={this.props.updateFilters}/>
+          {this.state.showFilters && <CategoryFilter filters={this.props.filters} updateFilters={this.props.updateFilters}/>}
           {currentPath.includes('/top-stories') && (
               <div className="date-container">
               <Select

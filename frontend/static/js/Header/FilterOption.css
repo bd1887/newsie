@@ -1,8 +1,8 @@
 .menu-item {
     margin-left: .4rem;
     margin-right: .4rem;
-    height: 3rem;
-    width: 14.2rem;
+    height: 4rem;
+    width: 15rem;
     display: inline-block;
     cursor: pointer;
     text-transform: uppercase;
@@ -11,7 +11,8 @@
     border-radius: 8px;
   }
   .menu-item-text {
-    line-height: 3rem;
+    font-size: 1.2rem;
+    line-height: 4rem;
   }
 
 .sports {
@@ -79,18 +80,6 @@
     color: #000;
     background-color: lightgray;
 }
-
-@media only screen 
-    and (max-width : 950px) {
-        .menu-item {
-            width: 16rem;
-            height: 4rem;
-        }
-        .menu-item-text {
-            font-size: 1.3rem;
-            line-height: 4rem;
-          }
-    } 
 
 @media (hover: hover) {
     .sports:hover {

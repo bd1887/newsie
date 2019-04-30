@@ -18,9 +18,10 @@ class ExclusiveStories extends Component {
       loading: true,
       showModal: false,
       selectedStory: null,
+      offset: 0,
+      fetchingData: false
     }
     this.filters = this.props.filters
-    this.offset = 0;
     this.getData = this.getData.bind(this)
     this.getMoreData = this.getMoreData.bind(this)
     this.setShow = this.setShow.bind(this)
@@ -47,90 +48,77 @@ class ExclusiveStories extends Component {
     let story = this.state.storyList.filter(story => {
       return story.id === id
     })
+    console.log(story)
     this.setState({ selectedStory: story[0], showModal: true })
   }
 
   getData(filters) {
-    let filters_query = filters && filters.length ? '&categories=' + filters.join(',') : ''
-    let query = '/api/exclusive-stories/?limit=20&offset=' + this.offset + filters_query
-    axios.get(query)
-    .then(response => {
-      this.setState({   
-        storyList: response.data.results,
-        loading: false
+    if (!this.state.fetchingData) {
+      let filters_query = filters && filters.length ? '&categories=' + filters.join(',') : ''
+      let query = '/api/exclusive-stories/?limit=20&offset=' + this.state.offset + filters_query
+      axios.get(query)
+      .then(response => {
+        this.setState({   
+          storyList: response.data.results,
+          loading: false,
+          offset: this.state.offset + 20
+        })
+        this.filters = []
+        this.filters = this.filters.concat(filters)
       })
-      this.filters = []
-      this.filters = this.filters.concat(filters)
-      this.offset += 20
-    })
+    }
   }
 
   getMoreData() {
-    let filters = this.props.filters
-    let filters_query = filters && filters.length ? '&categories=' + filters.join(',') : ''
-    let query = '/api/exclusive-stories/?limit=20&offset=' + this.offset + filters_query
-    axios.get(query)
-    .then(response => {
-      this.setState({   
-        storyList: this.state.storyList.slice().concat(response.data.results),
+    if (!this.fetchingData) {
+      let filters = this.props.filters
+      let filters_query = filters && filters.length ? '&categories=' + filters.join(',') : ''
+      let query = '/api/exclusive-stories/?limit=20&offset=' + this.state.offset + filters_query
+      axios.get(query)
+      .then(response => {
+        this.setState({   
+          storyList: this.state.storyList.slice().concat(response.data.results),
+          fetchingData: false,
+          offset: this.state.offset + 20
+        })
       })
-      this.offset += 20
-    })
+    }
+    
   }
 
   arraysEqual(a,b) { return !!a && !!b && !(a<b || b<a); }
 
   render() {
-    if (this.state.loading) {
-      return(
-        <Box pad="large" align="center" alignSelf="center" flex={true}>
-          <Text size="large" color="light-4">LOADING...</Text>
-          <Gremlin size="large" color="light-3" />
-        </Box>
-      )
-    } else {
-      return (
-        <Box className="infinite-scroll-box">
-
-          {this.state.showModal && (
+    return (
+      <Box className="infinite-scroll-box">
+      {this.state.showModal && (
             <ArticleModal setShow={this.setShow} story={this.state.selectedStory}/>
           )}
-          {this.getInfiniteScroll(this.state.storyList)}
-
-          <Box align="center" alignSelf="center">
-            <Text size="xlarge" color="light-4">The End.</Text>
-            <Gremlin size="xlarge" color="light-3" />
-            <Text size="large" color="light-4">There are no more articles about this topic.</Text>
-          </Box>
-
-        </Box>
-      )
-      
-    }
-
-  }
-
-  getInfiniteScroll(storyList) {
-    return (
-      <InfiniteScroll items={storyList}
-            step={10}
-            onMore={this.getMoreData}
-          >
-            {(story) => (
-              <SmallCard
-                key={story.id}
-                id={story.id}
-                title={story.articles[0].title}
-                description={story.articles[0].description}
-                img={story.articles[0].img}
-                category={story.category}
-                clickHandler = {this.onStoryCardClick}
-              />
-            )}
-          </InfiniteScroll>
+        <InfiniteScroll
+          items={this.state.storyList}
+          step={10}
+          replace={true}
+          onMore={() => this.getMoreData()}>
+          {(story) => (
+                <SmallCard
+                  key={story.id}
+                  id={story.id}
+                  title={story.articles[0].title}
+                  description={story.articles[0].description}
+                  img={story.articles[0].img}
+                  category={story.category}
+                  clickHandler = {this.onStoryCardClick}
+                />
+              )}
+        </InfiniteScroll>
+      </Box>
     )
+    
   }
 
 }
 
 export default ExclusiveStories
+
+const ITEMS = [];
+while (ITEMS.length < 100) ITEMS.push(ITEMS.length);

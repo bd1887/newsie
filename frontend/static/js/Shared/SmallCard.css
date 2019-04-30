@@ -1,5 +1,4 @@
 .small-card-box{
-    /* height: 15rem; */
     margin-bottom: 1rem;
     cursor: pointer;
     border-width: 1px;
@@ -8,6 +7,9 @@
 }
 .small-card-img-box {
     border-radius: 12px 0 0 12px;
+}
+.small-card-img-box-mb {
+    border-radius: 12px 12px 0 0;
 }
 
 .sports-story{

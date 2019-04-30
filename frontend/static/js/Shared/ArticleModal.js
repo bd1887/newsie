@@ -21,13 +21,7 @@ class ArticleModal extends Component {
     window.open(article[0].url, "_blank")
   }
 
-  componentDidMount() {
-    // document.body.style.overflowY = "hidden";
-    console.log(document.body.scrollTop)
-  }
-
   closeModal() {
-    // document.body.style.overflowY = "inherit";
     this.props.setShow(false)
   }
 
@@ -57,10 +51,10 @@ class ArticleModal extends Component {
             className="close-modal-mobile">
             <Close color="light-1"/>
           </Box>
-          {/* <Box
+          <Box
             pad="medium"
             overflow="scroll"
-          > */}
+          >
             <InfiniteScroll items={this.props.story.articles}
               step={7}
             >
@@ -82,7 +76,7 @@ class ArticleModal extends Component {
               <Text size="large" color="light-4">There are no more articles about this topic.</Text>
             </Box>
 
-          {/* </Box> */}
+          </Box>
         </Layer>
     );
   }
@@ -103,7 +97,7 @@ class ArticleModal extends Component {
             border="all"
             round="small" 
             pad="small"
-            overflow="scroll"
+            overflow="auto"
             width="large"
             height="large"
           >

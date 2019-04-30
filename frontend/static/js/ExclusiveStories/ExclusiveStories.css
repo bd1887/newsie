@@ -1,11 +1,12 @@
 .infinite-scroll-box {
-    width: 66%;
-    margin: 1.5rem auto 1.5rem auto;
+    width: 100%;
+    padding: 1rem 8rem 0 8rem;
+    /* margin: 1.5rem auto 1.5rem auto; */
 }
 
 @media only screen 
     and (max-width : 950px) {
         .infinite-scroll-box {
-            width: 100%;
+            padding: 1rem 0 0 0;
         }
     } 
