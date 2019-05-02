@@ -3,7 +3,9 @@
     cursor: pointer;
     border-width: 4px;
     border-style: solid;
+    background-blend-mode: saturation;
     transition: box-shadow .3s .1s;
+    text-align: center;
 }
 
 .card-text {
@@ -64,7 +66,9 @@
     box-shadow: 0px 0px 15px 1px rgba(65,90,119,0.75);
 }
 
-
+span::first-letter {
+    text-transform: capitalize;
+}
 
 .lg-box {
     width: 39%;
@@ -99,7 +103,6 @@
 .sm-box .headline {
     font-size: 1.4rem;
     line-height: 1.4rem;
-    text-align: center;
 }
 .sm-box .description {
     display: none;

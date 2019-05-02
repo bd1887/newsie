@@ -55,13 +55,14 @@ class ExclusiveStories extends Component {
   getData(filters) {
     if (!this.state.fetchingData) {
       let filters_query = filters && filters.length ? '&categories=' + filters.join(',') : ''
-      let query = '/api/exclusive-stories/?limit=20&offset=' + this.state.offset + filters_query
+      let query = '/api/exclusive-stories/?limit=20&offset=0' + filters_query
+      console.log(query)
       axios.get(query)
       .then(response => {
         this.setState({   
           storyList: response.data.results,
           loading: false,
-          offset: this.state.offset + 20
+          offset: 20
         })
         this.filters = []
         this.filters = this.filters.concat(filters)
@@ -70,7 +71,7 @@ class ExclusiveStories extends Component {
   }
 
   getMoreData() {
-    if (!this.fetchingData) {
+    if (!this.state.fetchingData) {
       let filters = this.props.filters
       let filters_query = filters && filters.length ? '&categories=' + filters.join(',') : ''
       let query = '/api/exclusive-stories/?limit=20&offset=' + this.state.offset + filters_query

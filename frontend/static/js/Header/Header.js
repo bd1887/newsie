@@ -35,14 +35,14 @@ class Header extends Component {
 
         <Box className="filters-container" style={showFiltersStyle}>
           {this.state.showFilters && <CategoryFilter filters={this.props.filters} updateFilters={this.props.updateFilters}/>}
-          {currentPath.includes('/top-stories') && (
+          {this.state.showFilters && currentPath.includes('/top-stories') && (
               <div className="date-container">
               <Select
                 margin="xsmall"
                 size="small"
                 options={dateRangeOptions}
                 value= {<Text className="date-range-text"><Calendar className="calendar"/>{this.props.dateRange}</Text>}
-                onChange={({ option }) => this.props.updateDateRange(option)}
+                onChange={({ option }) => {this.props.updateDateRange(option); this.setState({showFilters: !this.state.showFilters})}}
               />
             </div>  
           )}

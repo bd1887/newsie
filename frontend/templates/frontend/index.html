@@ -1,6 +1,6 @@
 {% load render_bundle from webpack_loader %}
 <!DOCTYPE html>
-<html>
+<html style="overflow-y: scroll">
     <head>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
@@ -14,7 +14,7 @@
         </style>
     </head>
     <body>
-        <div id="root" style="width: 100vw; margin: 0; max-width: 100%;"></div>
+        <div id="root" style="width: 100vw; margin: 0; max-width: 100%"></div>
         {% render_bundle 'main' %}
     </body>
 </html>

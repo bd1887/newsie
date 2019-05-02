@@ -119,7 +119,7 @@ class ArticleModal extends Component {
             <Box align="center" alignSelf="center">
               <Text size="xlarge" color="light-4">The End.</Text>
               <Gremlin size="xlarge" color="light-3" />
-              <Text size="large" color="light-4">There are no more articles about this topic.</Text>
+              <Text size="large" color="light-4" align="center">There are no more articles about this topic.</Text>
             </Box>
 
           </Box>
