@@ -21,12 +21,6 @@ urls = {
         'Education': [
                 'https://www.independent.ie/lifestyle/education/rss/',
         ],
-        # 'Life': [
-        #       'https://www.independent.ie/life/rss/',  
-        # ],
-        # 'Travel': [
-        #         'https://www.independent.ie/life/travel/rss/',
-        # ],
         'Ireland': [
                 'https://www.independent.ie/irish-news/rss/',
                 'https://feeds.feedburner.com/ieireland',
