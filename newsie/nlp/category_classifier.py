@@ -24,7 +24,10 @@ def classify(article):
     probability = max(probability[0])
 
     #If probability is greater than the threshold, return a category
-    classification = category if probability > .9 else ''
+    classification = category if probability >= .93 else ''
+
+    if probability >= .93:
+        print(f"Classified Article: '{article.title}' \n Class: {classification} -- {probability} \n")
 
     return classification
 
