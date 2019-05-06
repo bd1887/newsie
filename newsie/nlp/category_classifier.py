@@ -24,7 +24,7 @@ def classify(article):
     probability = max(probability[0])
 
     #If probability is greater than the threshold, return a category
-    classification = category if probability > .93 else ''
+    classification = category if probability > .9 else ''
 
     return classification
 
@@ -70,21 +70,43 @@ def train(articles):
         test_size=0.33 #splits 33% of data into test group
     )
 
+    # Logistic Regression:
+        # Accuracy on test_train_split: .95
+        # Accuracy on manually labeled data: .61
+
+    # SVM:
+        # Accuracy on test_train_split data: .96
+        # Accuracy on manually labeled data: .60
     #Pipeline lets us save the 
+    # pipe = Pipeline([
+    #     ('features', FeatureUnion([
+    #             ('url_tokens', Pipeline([
+    #                 #DataFrameColumnExtracter is a custom class
+    #                 #used for selecting the column with the correct feature
+    #                 ('selector', DataFrameColumnExtracter('url_tokens')),
+    #                 ('vec', cvec) # Count vectorizer
+    #             ])),
+    #             ('article_tokens', Pipeline([
+    #                 ('selector', DataFrameColumnExtracter('tokens')),
+    #                 ('vec', tfidf) # Tf-idf vectorizer
+    #             ]))
+    #         ])),
+    #     ('clf', OneVsRestClassifier(clf))
+    # ])
+
+    # Logistic Regression:
+        # #Accuracy on test_train_split data: .95
+        # #Accuracy on manually labeled data: .60
+
+    # SVM:
+        # #Accuracy on test_train_split data: .89
+        # #Accuracy on manually labeled data: .73
     pipe = Pipeline([
-        ('features', FeatureUnion([
-                ('url_tokens', Pipeline([
-                    #DataFrameColumnExtracter is a custom class
-                    #used for selecting the column with the correct feature
-                    ('selector', DataFrameColumnExtracter('url_tokens')),
-                    ('vec', cvec) # Count vectorizer
-                ])),
-                ('article_tokens', Pipeline([
+        ('article_tokens', Pipeline([
                     ('selector', DataFrameColumnExtracter('tokens')),
-                    ('vec', tfidf) # Tf-idf vectorizer
+                    ('vec', tfidf), # Tf-idf vectorizer
+                    ('clf', clf)    # SVM Classifier
                 ]))
-            ])),
-        ('clf', OneVsRestClassifier(clf))
     ])
 
     pipe.fit(X_train, y_train) #Trains the classifier

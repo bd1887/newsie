@@ -9,9 +9,6 @@ from utils.dummy_fun import dummy_fun
 from sklearn import metrics
 from newsie.publications.get_articles import categories
 
-# colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'brown']
-
-
 def plot_silhouette():
     for index, category in enumerate(categories()):
         articles = Article.objects.filter(category__exact=category)
@@ -59,35 +56,3 @@ def plot_silhouette():
     print(f"Average Top Silhouette Score: {average_top_eps_value}")
     plt.show()
 
-# def plot_silhouette():
-#     articles = Article.objects.filter(category__exact='World')
-#     #Creates a list of the pre-processed Article tokens
-#     texts = [art.tokens for art in articles]
-
-#     tfidf = TfidfVectorizer(
-#     use_idf=True,
-#     tokenizer=dummy_fun, #No need to pre-process,
-#     preprocessor=dummy_fun) # since it was done while webscraping
-    
-#     tfidf_matrix = tfidf.fit_transform(texts)
-#     tfidf_matrix = tfidf_matrix.todense()
-
-#     from sklearn import metrics
-
-#     eps = .05
-#     s_scores = []
-#     eps_values = []
-
-#     while eps <= 1:
-#         dbscan = DBSCAN(eps=eps, min_samples=1, metric='cosine')
-#         model = dbscan.fit(tfidf_matrix)
-#         labels = model.labels_
-#         s_score = metrics.silhouette_score(tfidf_matrix, labels, metric="cosine")
-#         s_scores.append(s_score)
-#         eps_values.append(eps)
-#         eps = eps + 0.05
-
-#     plt.plot(eps_values, s_scores)
-#     plt.ylabel('Silhouette')
-#     plt.xlabel('Epsilon')
-#     plt.show()

@@ -14,7 +14,7 @@ class ArticleCluster(models.Model):
     top_story_on = models.DateTimeField(null=True)
 
     most_recent_pub_date = models.DateTimeField(default=timezone.now)
-    category = models.CharField(max_length=500, blank=True)
+    category = models.CharField(max_length=1000, blank=True)
 
     def update_metadata(self):
         cluster_articles = Article.objects.filter(cluster__id=self.id)
@@ -55,12 +55,12 @@ class ArticleCluster(models.Model):
 
 
 class Article(models.Model):
-    url = models.URLField(max_length=500, unique=True)
-    title = models.CharField(max_length=500)
+    url = models.URLField(max_length=1000, unique=True)
+    title = models.CharField(max_length=1000)
 
     #A PostgreSQL-specific field that stores lists
     authors = ArrayField( 
-        models.CharField(max_length=500), #Stores a list of Charfields
+        models.CharField(max_length=1000), #Stores a list of Charfields
         blank=True,
         default=list
         )
@@ -73,26 +73,30 @@ class Article(models.Model):
 
     #Category of RSS feed if labeled,
     # otherwise the category predicted by the classifier
-    category = models.CharField(max_length=500, blank=True)
+    category = models.CharField(max_length=1000, blank=True)
 
     #Img url
-    img = models.URLField(blank=True)
+    img = models.URLField(max_length=1000, blank=True)
 
     #Date of publication
     pub_date = models.DateTimeField(default=timezone.now, blank=True)
 
     #Article text, preprocessed and tokenized
     tokens = ArrayField(
-        models.CharField(max_length=500),
+        models.CharField(max_length=1000),
         blank=True,
         default=list
     )
 
     # Foreign key of associated cluster
-    cluster = models.ForeignKey(ArticleCluster, on_delete=models.CASCADE, null=True, related_name="articles")
+    cluster = models.ForeignKey(ArticleCluster, on_delete=models.CASCADE, null=True, blank=True, related_name="articles")
 
     #Article came from a labeled RSS feed?
     labeled = models.BooleanField(default=True)
+    
+    # Manually applied label for testing purposes
+    manual_label = models.CharField(max_length=1000, blank=True)
+
 
 # Simply to appease the linter:
     id = ''
