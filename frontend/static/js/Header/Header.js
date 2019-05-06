@@ -24,7 +24,7 @@ class Header extends Component {
     let currentPath = this.props.location.pathname
     let showFiltersStyle = this.state.showFilters ? {maxHeight: '1000px'} : {maxHeight: 0}
     return (
-      <Box flex={true} className="header">
+      <Box className="header">
         <Text className="brand" margin="none" size="large" weight="bold" style={{ cursor: 'default'}}>NEW<Article></Article>SIE</Text>
         <Tabs className="stories-tab" onActive={(i) => this.tabOnActiveHandler(i)} alignSelf='center'>
           <Tab title='Top Stories'>

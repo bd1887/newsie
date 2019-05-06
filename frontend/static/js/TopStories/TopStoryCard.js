@@ -12,6 +12,7 @@ const categories = {
     'World': 'world-top-story'
   }
   
+//   The max number of characters before text is truncated
 const truncationValues = {
     'sm-box': 55,
     'md-box': 70,

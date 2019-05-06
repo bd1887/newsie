@@ -90,30 +90,45 @@ class ExclusiveStories extends Component {
   arraysEqual(a,b) { return !!a && !!b && !(a<b || b<a); }
 
   render() {
-    return (
-      <Box className="infinite-scroll-box">
-      {this.state.showModal && (
-            <ArticleModal setShow={this.setShow} story={this.state.selectedStory}/>
-          )}
-        <InfiniteScroll
-          items={this.state.storyList}
-          step={10}
-          replace={true}
-          onMore={() => this.getMoreData()}>
-          {(story) => (
-                <SmallCard
-                  key={story.id}
-                  id={story.id}
-                  title={story.articles[0].title}
-                  description={story.articles[0].description}
-                  img={story.articles[0].img}
-                  category={story.category}
-                  clickHandler = {this.onStoryCardClick}
-                />
+    if (this.state.loading) {
+      return(
+          <Box pad="large" align="center" alignSelf="center" flex={true}>
+            <Text size="large" color="light-4">LOADING...</Text>
+            <Gremlin size="large" color="light-3" />
+          </Box>
+        )         
+      } else {
+        return (
+          <Box className="infinite-scroll-box">
+          {this.state.showModal && (
+                <ArticleModal setShow={this.setShow} story={this.state.selectedStory}/>
               )}
-        </InfiniteScroll>
-      </Box>
-    )
+            <InfiniteScroll
+              items={this.state.storyList}
+              step={10}
+              replace={true}
+              onMore={() => this.getMoreData()}>
+              {(story) => (
+                    <SmallCard
+                      key={story.id}
+                      id={story.id}
+                      title={story.articles[0].title}
+                      description={story.articles[0].description}
+                      img={story.articles[0].img}
+                      category={story.category}
+                      clickHandler = {this.onStoryCardClick}
+                    />
+                  )}
+            </InfiniteScroll>
+              <Box align="center" alignSelf="center">
+                <Text size="xlarge" color="light-4">The End.</Text>
+                <Gremlin size="xlarge" color="light-3" />
+                <Text size="large" color="light-4" align="center">There are no more articles here.</Text>
+              </Box>
+          </Box>
+        )
+      }
+    
     
   }
 

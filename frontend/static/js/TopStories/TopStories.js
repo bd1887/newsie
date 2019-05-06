@@ -87,37 +87,63 @@ class TopStories extends Component {
           <Gremlin size="large" color="light-3" />
         </Box>
       )
-      
-    } else {
-      
-      return(
-        <Box className="top-stories-container">
-        {this.state.showModal && (
-            <ArticleModal setShow={this.setShow} story={this.state.selectedStory}/>
-          )}
-          <MediaQuery maxWidth={950}>
-            {(matches) => {
-              if (matches) {
-                return (
-                    this.getMobileView()
-                )
-              } else {
-                return this.getMasonry();
-              }
-            }}
-          </MediaQuery>
-        </Box>
-        
-      )
     }
+    return(
+      <Box className="top-stories-container">
+      {this.state.showModal && (
+          <ArticleModal setShow={this.setShow} story={this.state.selectedStory}/>
+        )}
+        <MediaQuery maxWidth={950}>
+          {(matches) => {
+            if (matches) {
+              return (
+                  this.getMobileView()
+              )
+            } else {
+              return this.getMasonry();
+            }
+          }}
+        </MediaQuery>
+      </Box>
+    )
   }
 
   getMasonry() {
     let count = 0
-      const storyCards = this.state.storyList.map(story => {
-        let storyListLength = this.state.storyList.length
-        let boxSize = count == 0 ? 'lg-box' : storyListLength - count > storyListLength / 2 ? 'md-box' : 'sm-box'
-        count++
+    const storyCards = this.state.storyList.map(story => {
+      let storyListLength = this.state.storyList.length
+      let boxSize = count == 0 ? 'lg-box' : storyListLength - count > storyListLength / 2 ? 'md-box' : 'sm-box'
+      count++
+      if  (this.props.filters.length == 0 || this.props.filters.includes(story.category))
+      return <TopStoryCard
+          key={story.id}
+          id={story.id}
+          title={story.articles[0].title}
+          description={story.articles[0].description}
+          category={story.category}
+          img={story.articles[0].img}
+          clickHandler = {this.onStoryCardClick}
+          boxSize = {boxSize}
+        />
+    })
+    let storyCardsAreEmpty = this.areStoryCardsEmpty(storyCards)
+    if (storyCardsAreEmpty) {
+      return this.noResultsFound()
+    }
+    return (
+        <Masonry
+              className="masonry"
+              options={masonryOptions}
+              enableResizableChildren={true}
+          >
+              {storyCards}
+        </Masonry>
+    )
+  }
+
+  getMobileView() {
+      let storyCards = this.state.storyList.map(story => {
+        let boxSize = 'mobile-box'
 
         if  (this.props.filters.length == 0 || this.props.filters.includes(story.category))
         return <TopStoryCard
@@ -127,51 +153,16 @@ class TopStories extends Component {
             description={story.articles[0].description}
             category={story.category}
             img={story.articles[0].img}
-            size={story.size_this_week}
             clickHandler = {this.onStoryCardClick}
             boxSize = {boxSize}
           />
       })
-      let storyCardsAreEmpty = this.areStoryCardsEmpty(storyCards)
-      if (storyCardsAreEmpty) {
-        return this.noResultsFound()
-      }
-      return (
-          <Masonry
-                className="masonry"
-                options={masonryOptions}
-                enableResizableChildren={true}
-            >
-                {storyCards}
-          </Masonry>
-      )
-  }
 
-  getMobileView() {
-      let storyCards = this.state.storyList.map(story => {
-          let boxSize = 'mobile-box'
-  
-          if  (this.props.filters.length == 0 || this.props.filters.includes(story.category))
-          return <TopStoryCard
-              key={story.id}
-              id={story.id}
-              title={story.articles[0].title}
-              description={story.articles[0].description}
-              category={story.category}
-              img={story.articles[0].img}
-              size={story.size_this_week}
-              clickHandler = {this.onStoryCardClick}
-              boxSize = {boxSize}
-            />
-        })
-
-      let storyCardsAreEmpty = this.areStoryCardsEmpty(storyCards)
-      if (storyCardsAreEmpty) {
-        return this.noResultsFound()
-      }
-      return storyCards
-
-
+    let storyCardsAreEmpty = this.areStoryCardsEmpty(storyCards)
+    if (storyCardsAreEmpty) {
+      return this.noResultsFound()
+    }
+    return storyCards
   }
 
   areStoryCardsEmpty(arr) {
