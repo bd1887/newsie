@@ -15,8 +15,8 @@ def dbscan(articles):
     
     tfidf_matrix = tfidf.fit_transform(texts)
 
-    #eps was chosen based on the silhouette scores at various eps values
-    dbscan = DBSCAN(eps=0.75, min_samples=2, metric='cosine')
+    #eps was chosen based on the silhouette scores (see "Evaluation" section)
+    dbscan = DBSCAN(eps=0.8, min_samples=2, metric='cosine')
 
     #Generates a list of cluster numbers (or -1 for noise)
     #whose indexes correspond to the indexes of the Articles list

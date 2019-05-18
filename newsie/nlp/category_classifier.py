@@ -73,14 +73,13 @@ def train(articles):
         test_size=0.33 #splits 33% of data into test group
     )
 
-    # Logistic Regression:
-        # Accuracy on test_train_split: .95
-        # Accuracy on manually labeled data: .61
+    # # Logistic Regression:
+    #     # Accuracy on train_test_split: .95
+    #     # Accuracy on manually labeled data: .61
 
-    # SVM:
-        # Accuracy on test_train_split data: .96
-        # Accuracy on manually labeled data: .60
-    #Pipeline lets us save the 
+    # # SVM:
+    #     # Accuracy on train_test_split data: .96
+    #     # Accuracy on manually labeled data: .60
     # pipe = Pipeline([
     #     ('features', FeatureUnion([
     #             ('url_tokens', Pipeline([
@@ -98,11 +97,11 @@ def train(articles):
     # ])
 
     # Logistic Regression:
-        # #Accuracy on test_train_split data: .95
+        # #Accuracy on train_test_split data: .95
         # #Accuracy on manually labeled data: .60
 
     # SVM:
-        # #Accuracy on test_train_split data: .89
+        # #Accuracy on train_test_split data: .89
         # #Accuracy on manually labeled data: .73
     pipe = Pipeline([
         ('article_tokens', Pipeline([

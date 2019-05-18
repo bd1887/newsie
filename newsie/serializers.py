@@ -9,8 +9,9 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = ('id', 'url', 'title', 'description', 'category', 'img', 'pub_date', 'labeled')
 
 class ArticleClusterSerializer(serializers.ModelSerializer):
-    # Calls self.get_articles() (the default name) to add related articles as a field:
+    # Calls self.get_articles() (Django calls this by default) to add related articles as a field:
     articles = serializers.SerializerMethodField()
+    
     class Meta:
         model = ArticleCluster
         fields = ('id', 'category', 'size' ,'size_today', 'size_this_week','size_this_month', 'most_recent_pub_date', 'articles')

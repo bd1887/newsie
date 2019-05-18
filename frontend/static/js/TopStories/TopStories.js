@@ -7,7 +7,6 @@ import Masonry from 'react-masonry-component';
 import MediaQuery from "react-responsive";
 import { Box, Text } from 'grommet';
 import { Gremlin } from 'grommet-icons';
-import { Link } from 'react-router-dom';
 
 const masonryOptions = {
   transitionDuration: '.4s',
@@ -23,19 +22,20 @@ class TopStories extends Component {
 
   constructor(props) {
     super(props)
+    
     this.state = {
-      storyList: [],
-      loading: true,
-      showModal: false,
-      selectedStory: null,
-      articleCount: 0,
-      dateRange: 'Today'
+      storyList: [], //stories retrieved from the REST API
+      loading: true, //toggles the loading icon, etc.
+      showModal: false, //toggles article list modal
+      selectedStory: null, //story to be displayed in modal
+      dateRange: 'Today' // Default date range
     }
     this.getData = this.getData.bind(this)
     this.onStoryCardClick = this.onStoryCardClick.bind(this)
     this.setShow = this.setShow.bind(this)
   }
 
+  // Lifecycle hook, called before component renders
   componentWillMount () {
     this.getData('Today');
   }
@@ -59,24 +59,16 @@ class TopStories extends Component {
   }
 
   getData(dateRange) {
+    // Makes request to backend for specified date range
     dateRange = dateRange.toLowerCase().replace(' ', '_')
     axios.get('/api/top-stories/?date_range=' + dateRange)
     .then(response => {
-      let articleCount = this.getArticleCount(response.data)
+      // Updates state with response data (The top stories list)
       this.setState({   
         storyList: response.data,
         loading: false,
-        articleCount: articleCount
       })
     })
-  }
-
-  getArticleCount(storyList) {
-    let sum = 0;
-    storyList.forEach(story => {
-      sum += story.articles.length
-    });
-    return sum
   }
 
   render() {
@@ -109,12 +101,22 @@ class TopStories extends Component {
   }
 
   getMasonry() {
+    // "count" stores the count of the card being generated.
+    // Stories are sorted from largest to smallest, so 0 will always be the TOP top story
     let count = 0
+
+    // Creates a storyCard for each story stored in the state
     const storyCards = this.state.storyList.map(story => {
       let storyListLength = this.state.storyList.length
+
+      // storyCards are assigned a size class according to their index
       let boxSize = count == 0 ? 'lg-box' : storyListLength - count > storyListLength / 2 ? 'md-box' : 'sm-box'
       count++
+
+      // Only create this card of its category isn't in the filters array
       if  (this.props.filters.length == 0 || this.props.filters.includes(story.category))
+
+      // "story" is the current ArticleCluster object being iterated over by the .map function
       return <TopStoryCard
           key={story.id}
           id={story.id}
@@ -123,7 +125,7 @@ class TopStories extends Component {
           category={story.category}
           img={story.articles[0].img}
           clickHandler = {this.onStoryCardClick}
-          boxSize = {boxSize}
+          boxSize = {boxSize} //Here is where the boxSize is passed to the card
         />
     })
     let storyCardsAreEmpty = this.areStoryCardsEmpty(storyCards)

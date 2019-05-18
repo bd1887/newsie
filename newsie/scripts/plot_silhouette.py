@@ -22,7 +22,6 @@ def plot_silhouette():
         preprocessor=dummy_fun) # since it was done while webscraping
         
         tfidf_matrix = tfidf.fit_transform(texts)
-        # tfidf_matrix = tfidf_matrix.todense()
 
         eps = .05
         top_eps_values = []

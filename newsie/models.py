@@ -7,6 +7,8 @@ from urllib.parse import urlparse
 import re
 
 class ArticleCluster(models.Model):
+
+    # Number of Articles within this cluster at various date ranges
     size = models.IntegerField(default=0)
     size_this_month = models.IntegerField(default=0)
     size_this_week = models.IntegerField(default=0)
@@ -14,6 +16,8 @@ class ArticleCluster(models.Model):
     top_story_on = models.DateTimeField(null=True)
 
     most_recent_pub_date = models.DateTimeField(default=timezone.now)
+
+    # The category of Articles within this cluster
     category = models.CharField(max_length=1000, blank=True)
 
     def update_metadata(self):
