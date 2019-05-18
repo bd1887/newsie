@@ -49,10 +49,10 @@ def train(articles):
         kernel='linear', #our data is linearly separable
         probability=True #we need probability to be calculated
         )
-    cvec = CountVectorizer(
-        tokenizer=dummy_fun, #function that does nothing
-        preprocessor=dummy_fun #since we already preprocessed
-        )
+    # cvec = CountVectorizer(
+    #     tokenizer=dummy_fun, #function that does nothing
+    #     preprocessor=dummy_fun #since we already preprocessed
+    #     )
     tfidf = TfidfVectorizer(tokenizer=dummy_fun, preprocessor=dummy_fun)
 
     #Converts Article objects to dictionaries for use in DataFrames

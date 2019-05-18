@@ -34,14 +34,6 @@ def tokenize(articles):
     # Create a list of lists of article tokens
     documents = [article.tokens for article in articles]
 
-    vocabulary = []
-    for document in documents:
-        for token in document:
-            if token not in vocabulary:
-                vocabulary.append(token)
-
-    print(f"Vocabulary Length: {len(vocabulary)}")
-
     # Generate ngrams (collocative phrases) from the tokens
     bigram = Phrases(documents, min_count=3, threshold=15, delimiter=b'_') #set threshold for bigrams somewhat low
     trigram = Phrases(bigram[documents], min_count=4, threshold=40, delimiter=b'_') #set threshold for trigrams somewhat high to avoid spurrious phrases
