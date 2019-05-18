@@ -43,9 +43,9 @@ def rss_scraper(rss_url, category):
     #Preprocesses, tokenizes, and gets trigrams from article text and saves it to Article object
     articles = tokenize(articles)
 
-    #Attempts to predict the category of any unlabeled articles
-    for article in articles:
-        if article.category == 'Unlabeled':
-            article.category = classify(article)
+    # #Attempts to predict the category of any unlabeled articles
+    # for article in articles:
+    #     if article.category == 'Unlabeled':
+    #         article.category = classify(article)
 
     return articles
