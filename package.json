@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@kapost/react-component-slider": "^1.0.5",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "grommet": "^2.6.6",
     "grommet-icons": "^4.2.0",
     "react": "^16.8.6",
